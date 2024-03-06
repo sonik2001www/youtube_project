@@ -1,0 +1,367 @@
+.add-deal__form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: baseline;
+    gap: 20rem;
+    padding-bottom: 30rem;
+}
+@media (max-width: 700px) {
+    .add-deal__form{
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+.add-deal__form-border {
+    border-bottom: 1rem solid var(--border-grey);
+}
+.add-deal__box {
+    display: flex;
+    flex-direction: column;
+    row-gap: 5rem;
+}
+.add-deal__input {
+    width: 100%;
+    padding: 15px 10px; /* Змінив "rem" на "px" */
+    border: 1px solid var(--border-grey);
+    border-radius: var(--border-raduis-main);
+    color: var(--textColor-main);
+    resize: none;
+    overflow: hidden;
+    height: 40px;
+}
+.add-deal__input:focus:not(.add-deal__box-required .add-deal__input, .add-deal__input-calendar-btn) {
+    outline: 1rem solid var(--accent-second);
+}
+.add-deal__input::placeholder {
+    color: var(--textColor-grey);
+}
+.add-deal__input-calendar {
+    position: relative;
+}
+.add-deal__input-calendar-btn {
+    cursor: pointer;
+    text-align: left;
+}
+.add-deal__input-calendar-btn-open {
+    outline: 1rem solid var(--accent-second);
+}
+.add-deal__input-calendar::after {
+    content: "";
+    position: absolute;
+    right: 10rem;
+    top: 15rem;
+    display: inline-block;
+    width: 20rem;
+    height: 20rem;
+    background-image: url("../../templates/images/calendar.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.add-deal-required__text {
+    font-weight: 700;
+}
+
+.add-deal__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 30rem 0;
+    border-bottom: 1rem solid var(--border-grey);
+}
+@media (max-width: 1350px) {
+    .add-deal__container {
+        grid-template-columns: 1fr;
+        row-gap: 30rem;
+    }
+}
+
+@media (min-width: 1350px) {
+    .add-deal-information {
+        padding-right: 30rem;
+        border-right: 1rem solid var(--border-grey);
+    }
+    .add-deal-details {
+        padding-left: 30rem;
+    }
+}
+.add-deal-information__form {
+    grid-template-columns: 1fr;
+    padding-bottom: 0;
+}
+
+.add-deal-details__form {
+    gap: 10rem;
+}
+
+/* checkbox */
+.add-deal__checkboxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30rem;
+    margin-top: 30rem;
+}
+@media (max-width: 700px){
+    .add-deal__checkboxes {
+        grid-template-columns: 1fr;
+    }
+}
+.add-deal__checkboxes-border {
+    border-bottom: 1rem solid var(--border-grey);
+    padding-bottom: 30rem;
+}
+.add-deal-checkbox__wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20rem;
+}
+@media (min-width: 700px){
+    .add-deal-checkbox__wrapper-input {
+        grid-column: span 2;
+    }
+}
+.custom-checkbox__container {
+    display: flex;
+    align-items: center;
+    column-gap: 5rem;
+}
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+}
+.checkmark {
+    height: 25px;
+    width: 25px;
+    border: 1rem solid var(--border-grey);
+    border-radius: var(--border-raduis-main);
+    overflow: hidden;
+}
+.custom-checkbox:hover input ~ .checkmark {
+    background-color: var(--border-grey-light-extra);
+}
+.custom-checkbox input:checked ~ .checkmark {
+    background-color: var(--accent-second);
+}
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+.custom-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+.custom-checkbox .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.add-deal-checkbox__form-sub {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 100rem;
+    column-gap: 10rem;
+}
+.custom-checkbox__title-info{
+    display: flex;
+    align-items: center;
+    column-gap: 10rem;
+}
+.custom-checkbox__title-info::after{
+    content: '';
+    display: inline-block;
+    width: 20rem;
+    height: 20rem;
+    background-image: url('../../templates/images/info.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+}
+/* platforms */
+.add-deals-platforms {
+    margin-top: 30rem;
+}
+.add-deals-platforms__block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 20rem;
+    padding-bottom: 30rem;
+}
+.add-deals-platforms__block-border {
+    border-bottom: 1rem solid var(--border-grey);
+}
+.add-deals-platforms__block > .h1 {
+    margin-bottom: 0;
+}
+.add-deal__container .block-title .h1::before,
+.add-deals-platforms__block > .h1::before {
+    display: none;
+}
+.add-deals-platforms__btn {
+    display: flex;
+    align-items: center;
+    column-gap: 10rem;
+}
+.add-deals-platforms__btn::after {
+    content: "+";
+    color: #fff;
+    font-size: 13rem;
+    width: 15rem;
+    height: 15rem;
+    background-color: var(--accent-second);
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.add-deals-platforms-comments {
+    margin-top: 30rem;
+}
+.add-deals-platforms-comments__textarea {
+    color: var(--textColor-main);
+    border: 1rem solid var(--border-grey);
+    border-radius: var(--border-raduis-main);
+    height: 200rem;
+    width: 100%;
+    margin-top: 5rem;
+    padding: 15rem 10rem;
+}
+.add-deals-platforms-comments__textarea:focus {
+    outline: 1rem solid var(--accent-second);
+}
+.add-deals-platforms-comments__textarea::placeholder {
+    color: var(--textColor-grey);
+}
+.add-deals-platforms-documents {
+    margin-top: 30rem;
+}
+.add-deals-platforms-documents__btn {
+    margin-top: 30rem;
+    display: flex;
+    align-items: center;
+    column-gap: 10rem;
+}
+.add-deals-platforms-documents__arrow {
+    position: relative;
+    width: 20rem;
+    height: 20rem;
+    border: 1rem solid var(--accent-second);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.add-deals-platforms-documents__arrow:after {
+    content: "";
+    position: absolute;
+    width: 10rem;
+    height: 10rem;
+    background-image: url("../../templates/images/arrow-up.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* add deals btns */
+.add-deals__btns {
+    display: flex;
+    justify-content: right;
+    column-gap: 10rem;
+    margin-top: 30rem;
+}
+
+.file_upload{
+    position: relative;
+    overflow: hidden;
+    font-size: 1em;        /* example */
+    height: 2em;           /* example */
+    line-height: 2em       /* the same as height */
+}
+.file_upload > button{
+    float: right;
+    width: 8em;            /* example */
+    height: 100%
+}
+.file_upload > div{
+    padding-left: 1em      /* example */
+}
+@media only screen and ( max-width: 500px ){  /* example */
+    .file_upload > div{
+        display: none
+    }
+    .file_upload > button{
+        width: 100%
+    }
+}
+.file_upload input[type=file]{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transform: scale(20);
+    letter-spacing: 10em;     /* IE 9 fix */
+    -ms-transform: scale(20); /* IE 9 fix */
+    opacity: 0;
+    cursor: pointer
+}
+
+/* Making it beautiful */
+
+.file_upload{
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    transition: box-shadow 0.1s linear;
+    max-width: 300px;
+    margin: 10px;
+}
+.file_upload.focus{
+    box-shadow: 0 0 5px rgba(0,30,255,0.4)
+}
+.file_upload > button{
+    background: #f0f4fb;
+    transition: background 0.2s;
+    color: #253871;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+.file_upload:hover > button{
+    background: #253871;
+    color: #f0f4fb;
+}
+.file_upload:active > button{
+    background: #253871;
+}
+
+.li-file-link {
+    padding: 3px;
+}
+
+.a-file-link {
+    color: var(--textColor-main);
+}
+
+.a-file-link:hover {
+    color: #253871;
+    font-weight: bold;
+}
+
+

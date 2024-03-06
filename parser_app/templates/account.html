@@ -1,0 +1,187 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block main_section %}
+{% if messages %}
+<ul class="messages list-unstyled">
+  {% for message in messages %}
+  <li {% if message.tags %}class="text-bg-{{ message.tags }} bg-opacity-50 message"{% endif %}>
+    <p align="center" class="d-flex justify-content-between msg">
+        {{ message }}
+        <button class="btn btn-sm btn-close-white" onclick="this.parentElement.parentElement.remove()">&times;</button>
+    </p>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+    <section class="main__section">
+        <div class="container">
+            <div class="main-block account-wrapper">
+
+                <!-- account left -->
+                <div class="account-left">
+                    <div class="account__img">
+                        <img src="{% if user.profile.profile_photo %}{{ user.profile.profile_photo.url }}{% else %}{% static 'templates/images/avatar.png' %}{% endif %}"
+                            alt="checkmark">
+                    </div>
+                    <br>
+                    <form id="change-photo-form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <input type="file" name="profile_photo" id="id_profile_photo" accept="image/*">
+                        <br>
+                        <br>
+                        <button type="submit" class="main-text">Change photo</button>
+                    </form>
+
+                    <a href="{% url 'delete_photo' %}" class="avatar__btn-link avatar__btn-link-unsubscribe">
+                        <span class="main-text" href="{% url 'delete_photo' %}">Delete photo</span>
+                    </a>
+
+                    <div class="avatar__actions-wrapper">
+                        <ul class="avatar__items">
+                            <!-- Account Overview -->
+                            <li class="avatar__item">
+                                <a href="#" class="avatar__item-link">
+                                    <div class="avatar__item-icon avatar__item-icon-profile">
+                                        <img src="{% static 'templates/images/profile.svg' %}" alt="checkmark">
+                                    </div>
+                                    <span class="main-text" href="#">Account Overview</span>
+                                </a>
+                            </li>
+
+                            <!-- Remaining Quota -->
+                            <li class="avatar__item">
+                                <a href="#" class="avatar__item-link">
+                                    <div class="avatar__item-icon avatar__item-icon-profile">
+                                        <img src="{% static 'templates/images/profile.svg' %}" alt="checkmark">
+                                    </div>
+                                    <span class="main-text" href="#">Remaining Quota</span>
+                                </a>
+                            </li>
+
+                            <!-- Receipts -->
+                            <li class="avatar__item">
+                                <a href="#" class="avatar__item-link">
+                                    <div class="avatar__item-icon avatar__item-icon-square">
+                                        <img src="{% static 'templates/images/square.svg' %}" alt="checkmark">
+                                    </div>
+                                    <span class="main-text" href="#">Receipts</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- btns -->
+                        <ul class="avatar__btns">
+                            <!-- Available Plans -->
+                            <li class="avatar__btn">
+                                <a href="{% url 'pricing' %}" class="avatar__btn-link avatar__btn-link-plans">
+                                    <div class="avatar__btn-icon avatar__btn-icon-plans">
+                                        <img src="{% static 'templates/images/checkmark.svg' %}" alt="checkmark">
+                                    </div>
+                                    <span class="main-text" href="#">Available Plans</span>
+                                </a>
+                            </li>
+
+                            <!-- Unsubscribe -->
+                            <li class="avatar__btn">
+                                <a href="{% url 'delete_quota' %}"
+                                class="avatar__btn-link avatar__btn-link-unsubscribe">
+                                    <div class="avatar__btn-icon avatar__btn-icon-unsubscribe">
+                                        <img src="{% static 'templates/images/block.svg' %}" alt="checkmark">
+                                    </div>
+                                    <span class="main-text" href="{% url 'delete_quota' %}">Unsubscribe</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- account right -->
+                <div class="account-right">
+                    <div><h1 class="h1">Account Overview</h1></div>
+
+                    <ul class="account__columns">
+                        <li class="account__column">
+                            <div class="account-right-h2"><h2 class="main-text-title">Profile</h2></div>
+
+                            <div class="account__columb-wrapper">
+                                <div class="account__column-content">
+                                    <p class="main-text-title">Username:</p>
+                                    <p class="main-text">{{ username }}</p>
+                                </div>
+                                <div class="account__column-content">
+                                    <p class="main-text-title">Email:</p>
+                                    <p class="main-text"><a href="#" class="main-text">{{ email }}</a></p>
+                                </div>
+                                <div class="account__column-content">
+                                    <p class="main-text-title">Registration Date:</p>
+                                    <p class="main-text">{{ date_joined }}</p>
+                                </div>
+                                <div class="account__column-content">
+                                    <p class="main-text-title">search/video/channel requests:</p>
+                                    <p class="main-text">{{ search_requests }}/{{ video_requests }}/{{ channel_requests }}</p>
+                                </div>
+                                <div class="account__column-content">
+                                    <p class="main-text-title">Total requests:</p>
+                                    <p class="main-text">{{ total_requests }}</p>
+                                </div>
+                                <div class="account__column-content">
+                                    <p class="main-text-title">Your available requests/limit:</p>
+                                    <p class="main-text">{{plan_availiable_requests}}/{{ plan_limit }}</p>
+                                </div>
+
+                            </div>
+                        </li>
+                        <li class="account__column">
+                            <div class="account-right-h2">
+                                <h2 class="main-text-title">Your plan</h2>
+                                <a href="{% url 'pricing' %}">Want to upgrade your plan?</a>
+                            </div>
+
+                            <div class="account__columb-wrapper">
+                                <div class="account__column-content">
+                                    <p class="main-text-title">Current Plan:</p>
+                                    <p class="main-text">
+                                        {{ quota }}{% if quota.name != 'default' %}<span class="main-text-red"> -> </span> <a class="main-text-red" href="{% url 'delete_quota' %}">Cancel Subscription</a>{% endif %}
+                                    </p>
+                                </div>
+                                <div class="account__column-content">
+                                    <p class="main-text-title">Purchase:</p>
+                                    {% if plan_expired_on %}
+                                    <p class="main-text">{{plan_start}}</p>
+                                    {% else %}
+                                    <p class="main-text">permanent/unpaid</p>
+                                    {% endif %}
+
+                                </div>                                
+                                <div class="account__column-content">
+                                    <p class="main-text-title">Expiration Date:</p>
+                                    {% if plan_expired_on %}
+                                    <p class="main-text">{{plan_expired_on}}</p>
+                                    {% else %}
+                                    <p class="main-text">permanent/unpaid</p>
+                                    {% endif %}
+                                </div>
+                                <div class="account__column-content">
+                                    <p class="main-text-title">Remaining time:</p>
+                                    {% if plan_expired_on %}
+                                    <p class="main-text">{{plan_remaining_time}}</p>
+                                    {% else %}
+                                    <p class="main-text">permanent/unpaid</p>
+                                    {% endif %}
+                                </div>
+                                <div class="account__column-content">
+                                    <p class="main-text-title">Status:</p>
+                                    {% if plan_status or quota.name == 'default' %}
+                                    <p class="main-text">Enabled</p>
+                                    {% else %}
+                                    <p class="main-text">Disabled</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

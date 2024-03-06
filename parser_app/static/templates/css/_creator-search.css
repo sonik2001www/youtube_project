@@ -1,0 +1,85 @@
+.styled-table-creator{
+    border-collapse: collapse;
+    font-size: 0.9em;
+    width: 100%;
+}
+.styled-table-creator tbody tr:not(:last-child) {
+    border-bottom: 1rem solid var(--border-grey-light);
+}
+.styled-table-creator th,
+.styled-table-creator td {
+    text-align: left;
+    min-width: 165rem;
+    padding: 10rem;
+}
+.styled-table-creator td:first-child{
+    padding-left: 0;
+}
+.creator__first-wrapper{
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    column-gap: 20rem;
+}
+.search__creator-img img{
+    width: 60rem;
+    height: 60rem;
+    background-color: #000;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.search__creator-info-main{
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10rem;
+}
+.search__actions {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    column-gap: 5rem;
+}
+
+/* Serch creators icons */
+.search__action-link svg:hover {
+    opacity: 0.8;
+}
+.search__action-link-add svg{
+    color: var(--accent);
+    width: 17rem;
+    height: 20rem;
+}
+.search__action-link-person svg{
+    color: var(--background-green);
+    width: 20rem;
+    height: 20rem;
+}
+.search__action-link-youtube svg{
+    width: 20rem;
+    height: 20rem;
+}
+.search__action-link-message-1 svg{
+    color: var(--accent-second);
+    width: 20rem;
+    height: 20rem;
+}
+.search__action-link-message-2 svg{
+    color: var(--background-green);
+    width: 20rem;
+    height: 20rem;
+}
+@media (max-width: 450px) {
+    .search__icon{
+        width: 35rem;
+        height: 35rem;
+    }
+    .filter-text{
+        display: none;
+    }
+}

@@ -1,0 +1,75 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block main_section %}
+{{ deals|json_script:"deals" }}
+<section class="main__section section-calendar">
+        <div class="container">
+            <div class="calendar-container">
+                <div>
+                    <h1 class="h1 h1-left">
+                        Calendar
+                    </h1>
+                    <!-- calendar-block -->
+                    <div class="main-block calendar-block">
+                        <div class="block-title calendar-block__title">
+                            <h2 class="h1"></h2>
+                            <div class="calendar-block__pagination pagination-calendar">
+                                <a href="/calendar/" class="pagination-calendar__day btn btn-transparent">Today</a>
+                                <div class="pagination-calendar__arrows">
+                                    <button type="button" class="pagination-calendar__arrow pagination-calendar__arrow-prev"></button>
+                                    <button type="button" class="pagination-calendar__arrow pagination-calendar__arrow-next"></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- calendar -->
+                        <div class="calendar-table-container">
+                            <table class="calendar">
+                                <thead class="calendar__header calendar-header">
+                                    <tr class="calendar-header__row">
+                                        <th class="calendar-header__item">Sun</th>
+                                        <th class="calendar-header__item">Mon</th>
+                                        <th class="calendar-header__item">Tue</th>
+                                        <th class="calendar-header__item">Wed</th>
+                                        <th class="calendar-header__item">Thu</th>
+                                        <th class="calendar-header__item">Fri</th>
+                                        <th class="calendar-header__item">Sat</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="calendar__body calendar-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- active deals -->
+                <div class="active-deals">
+                    <h1 class="h1 h1-left active-deals-h1">
+                        Active deals
+                    </h1>
+<!--                    <div class="active-deals__btns">-->
+<!--                        <div class="active-deals__btn btn">No schediled</div>-->
+<!--                        <div class="active-deals__btn btn btn-transparent">Schediled</div>-->
+<!--                    </div>-->
+                    <div class="main-block">
+                        <div class="active-deals-tasks">
+                            <div class="active-deals-task">
+<!--                                <div class="active-deals-block">-->
+<!--                                    <h4 class="main-text-title">test</h4>-->
+<!--                                    <button class="active-deals-block__btn"></button>-->
+<!--                                </div>-->
+                                <ul class="calendar-tasks">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block bottom_section %}
+<script src="{% static 'js/calendar.js' %}"></script>
+{% endblock %}

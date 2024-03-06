@@ -1,0 +1,219 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block main_section %}
+{% for message in messages %}
+<div class="container-fluid p-4 text-center">
+    <div class="alert alert-success alert-dismissible rounded-5" role="alert">
+        {{ message }}
+    </div>
+</div>
+{% endfor %}
+
+<div class="container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- add-deal -->
+        <div class="main-block">
+            <!-- add deal form -->
+            <div action="" class="add-deal__form add-deal__form-border">
+                <div class="add-deal__box add-deal__box-required">
+                    <h5 class="main-text-title add-deal__title">Brand</h5>
+                    {{add_deal_form.brand}}
+                </div>
+                <div class="add-deal__box">
+                    <h5 class="main-text-title add-deal__title">Date</h5>
+
+                    <!-- calendar -->
+                    <div class="add-deal__input-calendar">
+                        {{add_deal_form.date}}
+                        <div class="calendar-box-container">
+                            <div class="calendar-box">
+                                <div class="calendar-box__month">
+                                    <button type="button" class="calendar-box__arrow calendar-box__arrow-prev"></button>
+                                    <div class="calendar-box-dropdown dropdown">
+                                        <button class="dropdown__button main-text calendar-box__year" type="button"></button>
+                                        <ul class="calendar-box-dropdown__list dropdown__list">
+                                        </ul>
+                                        <input class="dropdown__input_hidden" type="text" name="select-category" value=""/>
+                                    </div>
+                                    <button type="button" class="calendar-box__arrow calendar-box__arrow-next"></button>
+                                </div>
+                                <div class="calendar-box__days">
+                                    <span>Sun</span>
+                                    <span>Mon</span>
+                                    <span>Tue</span>
+                                    <span>Wed</span>
+                                    <span>Thu</span>
+                                    <span>Fri</span>
+                                    <span>Sat</span>
+                                </div>
+                                <div class="calendar-box__dates"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-deal__box">
+                    <h5 class="main-text-title add-deal__title">Status</h5>
+                    {{add_deal_form.status}}
+                </div>
+            </div>
+
+            <!-- add deal form -->
+            <div class="add-deal__container">
+                <!-- add deal form information -->
+                <div class="add-deal__information add-deal-information">
+                    <div class="block-title">
+                        <h2 class="h1">Brand Contact Information</h2>
+                    </div>
+                    <div class="add-deal__form add-deal-information__form">
+                        <div class="add-deal__box">
+                            <h5 class="main-text-title add-deal__title">Name</h5>
+                            {{add_deal_form.name}}
+                        </div>
+                        <div class="add-deal__box">
+                            <h5 class="main-text-title add-deal__title">Email</h5>
+                            {{add_deal_form.email}}
+                        </div>
+                        <div class="add-deal__box">
+                            <h5 class="main-text-title add-deal__title">Phone Number</h5>
+                            {{add_deal_form.phone_number}}
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- add deal details -->
+                <div class="add-deal__details add-deal-details">
+                    <div class="block-title">
+                        <h2 class="h1">Details</h2>
+                    </div>
+
+                    <!-- add deal form details -->
+                    <div class="add-deal__form add-deal-details__form add-deal__form-border">
+                        <div class="add-deal__box">
+                            <h5 class="main-text-title add-deal__title">Rated Quoted</h5>
+                            {{add_deal_form.rated_quoted}}
+                        </div>
+                        <div class="add-deal__box">
+                            <h5 class="main-text-title add-deal__title">Counter Offer</h5>
+                            {{add_deal_form.counter_offer}}
+                        </div>
+                        <div class="add-deal__box">
+                            <h5 class="main-text-title add-deal__title">Agreed Rate</h5>
+                            {{add_deal_form.agreed_rate}}
+                        </div>
+                    </div>
+
+                    <!-- add deal checkboxes -->
+                    <div class="add-deal-all-checkboxes">
+                        <div class="add-deal__checkboxes add-deal__checkboxes-border">
+                            <div class="add-deal-checkbox__wrapper">
+                                <div class="custom-checkbox__container">
+                                    <label class="custom-checkbox">
+                                        {{add_deal_form.introduction}}
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <p class="custom-checkbox__title custom-checkbox__title-info main-text-title">
+                                        Introduction Sent</p>
+                                </div>
+                            </div>
+                            <div class="add-deal-checkbox__wrapper">
+                                <div class="custom-checkbox__container">
+                                    <label class="custom-checkbox">
+                                        {{add_deal_form.pitch}}
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <p class="custom-checkbox__title custom-checkbox__title-info main-text-title">Pitch
+                                        Sent</p>
+                                </div>
+                            </div>
+                            <div class="add-deal-checkbox__wrapper add-deal-checkbox__wrapper-input">
+                                <div class="custom-checkbox__container">
+                                    <label class="custom-checkbox">
+                                        {{add_deal_form.views_impressions}}
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <p class="custom-checkbox__title main-text-title">Views/Impressions Guarantee
+                                    </p>
+                                </div>
+                                <div action="" class="add-deal-checkbox__form">
+                                    <div class="add-deal__box">
+                                        <h5 class="main-text-title add-deal__title">{{add_deal_form.views_amount.label}}</h5>
+                                        {{add_deal_form.views_amount}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-deal__checkboxes">
+                            <div class="add-deal-checkbox__wrapper add-deal-checkbox__wrapper-input">
+                                <div class="custom-checkbox__container">
+                                    <label class="custom-checkbox">
+                                        {{add_deal_form.affiliate_check}}
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <p class="custom-checkbox__title main-text-title">Affiliate link</p>
+                                </div>
+                                <div action="" class="add-deal-checkbox__form add-deal-checkbox__form-sub">
+                                    <div class="add-deal__box">
+                                        <h5 class="main-text-title add-deal__title">{{add_deal_form.affiliate_link.label}}</h5>
+                                        {{add_deal_form.affiliate_link}}
+                                    </div>
+                                    <div class="add-deal__box">
+                                        <h5 class="main-text-title add-deal__title">{{add_deal_form.commissions.label}}</h5>
+                                        {{add_deal_form.commissions}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="add-deals-platforms">
+                <div class="add-deals-platforms-comments">
+                    <h4 class="add-deals-platforms-comments__title main-text-title">Notes/Comments</h4>
+                    {{ add_deal_form.comment }}
+                </div>
+                <div class="add-deals-platforms-documents">
+                    <div class="block-title add-deals-platforms__block">
+                        <h2 class="h1">Documents</h2>
+                    </div>
+                    <div class="add-deals-platforms-documents__info">
+                        <p class="add-deals-platforms-documents__text main-text">Upload up to 5 documents having a
+                            maximum of 2 MB each</p>
+                    </div>
+                    <ul>
+                      {% for document in related_documents %}
+                        <li class="li-file-link">
+                          <a class="a-file-link" href="{{ document.docfile.url }}" target="_blank">{{ document.title }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+
+<!--                    {{ document_form.docfile }}-->
+                    {{ document_form.management_form }}
+                    {% for docfile in document_form %}
+                        <div class="file_upload">
+                            <button type="button">Chose</button>
+                            <div>File not chosen</div>
+                            {{ docfile.docfile }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="add-deals__btns">
+                <a href="/deals/" class="add-deals__btn add-deals__btn-cancel btn btn-transparent">Cancel</a>
+                <button class="add-deals__btn add-deals__btn-create btn">Create</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% endblock %}
+
+{% block bottom_section %}
+<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="{% static 'js/add-deal.js' %}"></script>
+{% endblock %}

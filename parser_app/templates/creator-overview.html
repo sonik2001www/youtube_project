@@ -1,0 +1,143 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block main_section %}
+    <section class="main__section">
+        <div class="container">
+            <div class="overview-wrapper">
+                <div class="overview-top-content">
+                    <div class="overview__creator">
+                        <div class="overview__creator-info">
+                            <div class="overview__creator-title">
+                                <h2 class="h1">Creator overview</h2>
+                            </div>
+                            <div class="overview__creator-profile">
+                                <div class="overview__creator-img">
+                                    <img src="{{ channel.thumbnail_medium_url }}" alt="avatar">
+                                </div>
+                                <div class="overview__creator-profile-container">
+                                    <div class="overview__creator-profile-text">
+                                        <p class="main-text">Channel name:</p>
+                                        <h4 class="main-text-title overview__creator-text-big">
+                                            {{ channel.title }}
+                                        </h4>
+                                    </div>
+                                    <div class="overview__creator-profile-text">
+                                        <p class="main-text">Country:</p>
+                                        <h4 class="main-text-title main-text-title-country">
+                                            {% if channel.country %}
+                                                {% if channel.country.flag %}
+                                                    <img src="{{ channel.country.flag.url }}" alt="">
+                                                {% endif %}
+                                                {{ channel.country.code }}
+                                            {% else %}
+                                                Country unknown
+                                            {% endif %}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="overview__creator-items">
+                                <li class="overview__creator-item">
+                                    <p class="main-text">YouTube category:</p>
+                                    <h4 class="main-text-title">{{ channel.categories }}</h4>
+                                </li>
+                                <li class="overview__creator-item">
+                                    <p class="main-text">Total Videos:</p>
+                                    <h4 class="main-text-title">
+                                        {% if channel.video_count is None %}
+                                            Unknown
+                                        {% else %}
+                                            {{ channel.video_count }}
+                                        {% endif %}
+                                    </h4>
+                                </li>
+                                <li class="overview__creator-item">
+                                    <p class="main-text">Creator date:</p>
+                                    <h4 class="main-text-title">{{ channel.published|date:"F d, Y" }}</h4>
+                                </li>
+                                <li class="overview__creator-item">
+                                    <p class="main-text">Subscribers:</p>
+                                    <h4 class="main-text-title bold">{{ channel.subscribers_count }}</h4>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="overview__creator-social-block">
+                            <h5 class="main-text">Other links:</h5>
+                            <ul class="overview__creator-socials">
+                                <!-- social-yt -->
+                                <li class="overview__creator-social">
+                                    <a href="{{ channel.url }}" class="overview__creator-social-link social-yt" target="_blank">
+                                        <img src="{% static 'templates/images/youtube.svg' %}" alt="soc">
+                                    </a>
+                                </li>
+                                {% for link in channel.websites_list %}
+                                    {% if 'facebook' in link.lower %}
+                                        <li class="search__action">
+                                            <li class="overview__creator-social">
+                                                <a href="{{ link }}" class="overview__creator-social-link social-fb" target="_blank">
+                                                    <img src="{% static 'templates/images/facebook.svg' %}" alt="soc">
+                                                </a>
+                                            </li>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for link in channel.websites_list %}
+                                    {% if 'twitter' in link.lower %}
+                                        <li class="search__action">
+                                            <li class="overview__creator-social">
+                                                <a href="{{ link }}" class="overview__creator-social-link social-tw" target="_blank">
+                                                    <img src="{% static 'templates/images/twitter.svg' %}" alt="soc">
+                                                </a>
+                                            </li>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for link in channel.websites_list %}
+                                    {% if 'instagram' in link.lower %}
+                                        <li class="search__action">
+                                            <li class="overview__creator-social">
+                                                <a href="{{ link }}" class="overview__creator-social-link social-tw" target="_blank">
+                                                    <img src="{% static 'image/instagram.svg' %}" alt="soc" style="width: 24px;">
+                                                </a>
+                                            </li>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                            {% if channel.email %}
+                                <div class="overview__creator-btn"><button>{{ channel.email }}</button></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="overview-partnership">
+                        <div class="overview-partnership-content">
+                            <div class="overview__creator-title">
+                                <h2 class="h1">Founded partnerships</h2>
+                            </div>
+                            <ul class="overview-partnership-resuilts">
+                                {% for brand in brands %}
+                                    <!-- partner -->
+                                    <li class="overview-partnership-resuilt">
+                                        <a href="#" class="overview-partnership-resuilt__content">
+                                            <div class="overview__partnership-img">
+                                                <img src="{{ brand.logo.url }}" alt="brand">
+                                            </div>
+                                            <div class="overview-partnership-text">
+                                                <h4 class="main-text-title">{{ brand.name }}</h4>
+                                                <p class="main-text">{{ brand.domain }}</p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block bottom_section %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'templates/js/chart.js' %}"></script>
+{% endblock %}

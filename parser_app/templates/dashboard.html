@@ -1,0 +1,56 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block main_section %}
+    <section class="main__section">
+        <div class="container">
+            <h1 class="h1">Parsing</h1>
+
+            <div class="cards">
+                <div class="card">
+                    <div class="card__container active">
+                        <a href="{% url 'video_output' %}">
+                            <div class="card_thumb">
+                                <button type="submit" class="card_thumb_figure">
+                                    <img src="{% static 'templates/images/search.svg' %}" class="img-fluid" alt=""/>
+                                </button>
+                            </div>
+                        </a>
+                        <div class="card_caption">
+                            <a href="{% url 'video_output' %}">Website Search</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__container">
+                        <a href="{% url 'channels_output' %}">
+                            <div class="card_thumb">
+                                <button type="submit" class="card_thumb_figure">
+                                    <img src="{% static 'templates/images/booking-cl.svg' %}" class="img-fluid" alt=""/>
+                                </button>
+                            </div>
+                        </a>
+                        <div class="card_caption">
+                            <a href="{% url 'channels_output' %}">Creator search</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card__container">
+                        <a href="{% url 'libary_search' sort_field='name' %}">
+                            <div class="card_thumb">
+                                <button type="submit" class="card_thumb_figure">
+                                    <img src="{% static 'templates/images/account-cl.svg' %}" class="img-fluid" alt=""/>
+                                </button>
+                            </div>
+                        </a>
+                        <div class="card_caption">
+                            <a href="{% url 'libary_search' sort_field='name' %}">Brand Libary</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

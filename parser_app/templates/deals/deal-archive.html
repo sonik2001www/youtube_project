@@ -1,0 +1,119 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block main_section %}
+<section class="main__section">
+    <div class="container">
+        <!-- deal -->
+        <div class="deal">
+            <div class="deal__btns">
+                <a href='/deals/' class="deal__btn deal__btn btn btn-transparent">Deals</a>
+            </div>
+            <div class="main-block">
+                {% for deal in page %}
+                <hr>
+                <div class="deal__list">
+                    <div class="deal__item">
+                        <p class="main-text-title">Brand</p>
+                        <p class="main-text-light">{{ deal.brand }}</p>
+                    </div>
+                    <div class="deal__item">
+                        <p class="main-text-title">Date</p>
+                        <p class="main-text-light">{{ deal.date }}</p>
+                    </div>
+                    <div class="deal__item">
+                        <p class="main-text-title">Quoted</p>
+                        <p class="main-text-light">{{ deal.rated_quoted }}</p>
+                    </div>
+                    <div class="deal__item">
+                        <p class="main-text-title">Contact</p>
+                        <p class="main-text-light">{{ deal.phone_number }}</p>
+                    </div>
+                    <div class="deal__item deal__item-noborder">
+                        <p class="main-text-title">Post required</p>
+                        <p class="main-text-light">{{ deal.commissions }}</p>
+                    </div>
+                    <div class="deal__item">
+                        <p class="main-text-title">Agreed rate</p>
+                        <p class="main-text-light">${{ deal.agreed_rate }}</p>
+                    </div>
+                    <div class="deal-item-more deal__item deal__item-more" data-drop>
+                        <button class="deal-item-more__btn main-text-light" data-dropBtn>...</button>
+                        <div class="deal-item-more__dropmenu dropmenu" data-dropMenu>
+                            <ul class="deal-item-more__list">
+                                <li class="deal-item-more__item main-text"><a href="/delete_deal/{{deal.id}}/"
+                                                                              class="deal-item-more__link">Delete</a>
+                                </li>
+                                <li class="deal-item-more__item main-text"><a href="/archived_archive_deal/{{deal.id}}/"
+                                                                              class="deal-item-more__link">Unarchive</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- pagination -->
+        <div class="pagination">
+            <form method="GET">
+                Rows per page
+                <input
+                        type="text"
+                        name="size"
+                        title="to change the page size enter a new value"
+                        placeholder="{{ size }}"
+                        autocomplete="off"
+                        spellcheck="false"
+                        minlength="1"
+                        maxlength="2"
+                        required
+                />
+                <button title="to change the page size enter a new value">
+                    Apply
+                </button>
+            </form>
+            <ul class="pagination__items">
+                {% if page.has_previous %}
+                <li class="page-item previous">
+                    <a href="?page={{ page.previous_page_number }}&size={{ size }}" class="page-link">Previous</a>
+                </li>
+                {% else %}
+                <li class="page-item previous disabled">
+                    <a href="#" class="page-link disabled" aria-disabled="true">Previous</a>
+                </li>
+
+                {% endif %}
+
+                {% if page.has_previous %}
+                <li class="page-item ">
+                    <a href="?page={{ page.previous_page_number }}&size={{ size }}"
+                       class="page-link">{{ page.previous_page_number }}</a></li>
+                {% endif %}
+                <li class="page-item active"><a href="#" class="page-link">{{ page.number }}</a></li>
+                {% if page.has_next %}
+                <li class="page-item "><a href="?page={{ page.next_page_number }}&size={{ size }}" class="page-link">
+                    {{ page.next_page_number }}</a></li>
+                {% endif %}
+
+                {% if page.has_next %}
+                <li class="page-item next">
+                    <a href="?page={{ page.next_page_number }}&size={{ size }}" class="page-link">Next</a>
+                </li>
+                {% else %}
+                <li class="page-item next disabled"><a href="#" class="page-link disabled" aria-disabled="true">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}
+
+{% block bottom_section %}
+<script src="{% static 'templates/js/index.js'%}"></script>
+{% endblock %}

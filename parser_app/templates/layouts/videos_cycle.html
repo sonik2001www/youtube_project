@@ -1,0 +1,52 @@
+{% load video_tags %}
+{% for video in videos %}
+    <!-- search website -->
+    <li class="search__website">
+        <!-- search website img -->
+        <a href="{{ video.url }}" class="search__website-img" target="_blank">
+            <img src="{{ video.thumbnail_medium_url }}" alt="video">
+        </a>
+        <!-- search website main -->
+        <div class="search__website-info-wrapper">
+            <div class="search__website-info">
+                <ul class="search__website-items search__row">
+                    <li><a href="{{ video.url }}" class="main-text-accent" target="_blank">{{ video.name }}</a></li>
+                    <li class="search__website-item main-text main-text-title">
+                        Subscribers: <span class="main-text">{{ video.channel_subscribers_count }}</span>
+                    </li>
+                    <li class="search__website-item main-text main-text-title">
+                        Chanel ID: <span class="main-text">{{ video.channel_id }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="search__website-info">
+                <ul class="search__website-items search__row">
+                    <li class="search__website-item main-text main-text-title">
+                        Views: <span class="main-text">{{ video.views_count }}</span>
+                    </li>
+                    <li class="search__website-item main-text main-text-title">
+                        Date: <span class="main-text">{{ video.published }}</span>
+                    </li>
+                    <li class="search__website-item main-text main-text-title">
+                        Country: <span class="main-text">{{ video.channel_country }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="search__website-info">
+                <ul class="search__website-items search__row">
+                    {% for link in video.websites_list %}
+                        {% if link.0 == "&" and link.1 == "&" %}
+                            <li class="search__website-item main-text">
+                                <a href="{% remove_sum link %}" class="main-text" target="_blank" style="background: #ffffb7;">{% len_link_remove_sum link %}</a>
+                            </li>
+                        {% else %}
+                            <li class="search__website-item main-text">
+                                    <a href="{{ link }}" class="main-text" target="_blank">{% len_link link %}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </li>
+{% endfor %}

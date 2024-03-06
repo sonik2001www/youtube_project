@@ -1,0 +1,416 @@
+#id_country {
+    max-width: 60%;
+}
+.libary__logo img {
+    max-height: 35px;
+}
+.main-text-title-country::before {
+    display: none !important;
+}
+.remove__filter,
+.search__filter {
+    position: relative;
+    user-select: none;
+}
+.remove__filter .show-add-remove,
+.remove__filter > a {
+    background-color: #c82333;
+    transition: background 0.3s;
+}
+/* .pagination, */
+.profile,
+.remove__filter,
+.search__filter {
+    user-select: none;
+}
+.search__filter {
+    cursor: default;
+}
+.error-input {
+    border-bottom: 1px solid #c82333 !important;
+}
+.add-remove,
+.search__filter .filter-icon,
+.search__filter .filter-text {
+    cursor: pointer;
+}
+.remove__filter {
+    display: flex;
+}
+.remove__filter .modal input {
+    padding: 2px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.remove__filter > a {
+    padding: 6px 6px 6px 12px;
+    border-radius: 5px 0 0 5px;
+    color: #fff;
+}
+.remove__filter .show-add-remove {
+    display: inline-block;
+    padding: 6px 10px 6px 6px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+.remove__filter .show-add-remove::after {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: 0.2em;
+    content: "";
+    border-top: 0.3em solid #fff;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+.remove__filter .show-add-remove:hover,
+.remove__filter > a:hover {
+    background-color: #ab202d;
+}
+.modal {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 105%;
+    width: 300px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+.show-modal {
+    display: block;
+}
+.modal p:not(:last-child) {
+    margin-bottom: 5px;
+}
+.modal input {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 2px 10px;
+}
+.modal label {
+    display: inline-block;
+    margin-right: 10px;
+}
+.AsideDropdown{
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .2s ease;
+}
+.AsideDropdown > ul.navbar__items {
+    margin: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1rem solid var(--border-grey-light-extra);
+}
+.active-AsideDropdown.profile .profile__name::after{
+    transform: rotate(180deg);
+}
+.load{
+    display: flex;
+}
+.div-deals-tracker {
+    display: none;
+    border-top: 1rem solid var(--border-grey-light-extra);
+    border-bottom: 1rem solid var(--border-grey-light-extra);
+    padding: 0 5rem;
+}
+.ul-deals-tracker {
+    margin-bottom: 20px;
+}
+/* .pagination, */
+
+#navbar {
+    background-color: #1b2c39;
+}
+.small-navbar .navbar__logo span {
+    background-image: url("/static/templates/images/small-logo-without.png");
+}
+.navbar__logo span {
+    background-image: url("/static/templates/images/logo-without.png");
+}
+.navbar__top {
+    margin-bottom: 10px;
+}
+.styled-table tbody tr:last-child {
+    border: none;
+}
+
+
+/* .pagination {
+    align-items: center;
+    justify-content: right;
+    padding: 30px 22px;
+    color: #777;
+}
+.pagination form {
+    display: inline-block;
+    margin-right: 100px;
+}
+.pagination form input {
+    color: #777;
+    width: 30px;
+}
+.pagination form button {
+    background: #777;
+    padding: 2px 5px;
+    color: #fff;
+    border-radius: 3px;
+}
+.pagination .arrows {
+    margin-left: 25px;
+} */
+
+
+/* pagination */
+.pagination {
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 3px;
+    gap: 10rem;
+    margin: 2px 0;
+    white-space: nowrap;
+    justify-content: center;
+    padding: 30rem 0;
+}
+.pagination form {
+    display: inline-block;
+    color: var(--textColor-main);
+    text-align: center;
+}
+.pagination form input {
+    width: 30px;
+    padding: 0 3rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border-grey-light-extra);
+}
+.pagination form input::placeholder{
+    color: var(--textColor-grey);
+}
+.pagination form button {
+    background: var(--textColor-grey);
+    padding: 2px 5px;
+    color: #fff;
+    border-radius: 3px;
+    transition: all .2s ease;
+
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    padding: 8rem 16rem;
+
+    color: var(--textColor-main);
+
+    background-color: #fff;
+    border-color: var(--border-grey);
+}
+.pagination form button:hover{
+    color: #295a9f;
+    border-color: #dee2e6;
+    background-color: rgba(70, 127, 207, 0.06);
+}
+.pagination__items{
+    display: flex;
+    align-items: center;
+}
+.page-link {
+    position: relative;
+    display: block;
+    padding: 8rem 16rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    background-color: #fff;
+    border: 1px solid var(--border-grey);
+    color: var(--textColor-main);
+    transition: all .2s ease;
+    cursor: pointer;
+}
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: var(--accent-second);
+    border-color: var(--accent-second);
+    cursor: default;
+}
+.page-item.disabled > a {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    color: #ced4da;
+    pointer-events: none;
+    background-color: #fff;
+    border-color: var(--border-grey);
+}
+.page-link:hover {
+    z-index: 2;
+    color: #295a9f;
+    border-color: #dee2e6;
+    background-color: rgba(70, 127, 207, 0.06);
+}
+
+
+.arrows img {
+    height: 20px;
+}
+.not-clickable {
+    opacity: 0.5;
+}
+.search__box {
+    grid-template-columns: 1fr max-content max-content max-content;
+}
+.load {
+    justify-content: center;
+    pointer-events: none;
+}
+.load button {
+    display: inline-flex;
+}
+.lds-spinner {
+    color: official;
+    display: inline-block;
+    position: relative;
+    width: 20px;
+    height: 20px;
+}
+.lds-spinner div {
+    transform-origin: 10px 10px;
+    animation: 1.2s linear infinite lds-spinner;
+}
+.lds-spinner div:after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 9px;
+    width: 1.5px;
+    height: 6px;
+    border-radius: 20%;
+    background: #fff;
+}
+.lds-spinner div:first-child {
+    transform: rotate(0);
+    animation-delay: -1.1s;
+}
+.lds-spinner div:nth-child(2) {
+    transform: rotate(30deg);
+    animation-delay: -1s;
+}
+.lds-spinner div:nth-child(3) {
+    transform: rotate(60deg);
+    animation-delay: -0.9s;
+}
+.lds-spinner div:nth-child(4) {
+    transform: rotate(90deg);
+    animation-delay: -0.8s;
+}
+.lds-spinner div:nth-child(5) {
+    transform: rotate(120deg);
+    animation-delay: -0.7s;
+}
+.lds-spinner div:nth-child(6) {
+    transform: rotate(150deg);
+    animation-delay: -0.6s;
+}
+.lds-spinner div:nth-child(7) {
+    transform: rotate(180deg);
+    animation-delay: -0.5s;
+}
+.lds-spinner div:nth-child(8) {
+    transform: rotate(210deg);
+    animation-delay: -0.4s;
+}
+.lds-spinner div:nth-child(9) {
+    transform: rotate(240deg);
+    animation-delay: -0.3s;
+}
+.lds-spinner div:nth-child(10) {
+    transform: rotate(270deg);
+    animation-delay: -0.2s;
+}
+.lds-spinner div:nth-child(11) {
+    transform: rotate(300deg);
+    animation-delay: -0.1s;
+}
+.lds-spinner div:nth-child(12) {
+    transform: rotate(330deg);
+    animation-delay: 0s;
+}
+@keyframes lds-spinner {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* payment styles
+/////////////// */
+
+hr {
+    margin: 5px;
+}
+.d-flex-between {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.px-5 {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.px-2 {
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.rounded-2 {
+    border-radius: 10px 10px ;
+}
+.payment-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid rgba(2, 93, 153, 0.418);
+    padding: 10px;
+}
+.payment-option img {
+    width: 100px;
+}
+.checked{
+    box-shadow: 5px 5px 5px rgba(17, 24, 126, 0.3);
+  }
+
+
+.remove-list-div {
+    display: block;
+}
+
+.remove-list-div-inner{
+}
+
+.remove-list-p {
+    padding: 5px;
+    font-weight: 700;
+    font-size: var(--fontSize-default);
+    display: inline-block;
+}
+
+.remove-list-button {
+  background-color: #f44336;
+  border: none;
+  color: white;
+  font-size: 15px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.remove-list-button:hover {
+  background-color: #d32f2f;
+}

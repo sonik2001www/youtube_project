@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+    padding: 0;
+    color: #696969;
+    font: normal 10pt Arial,Helvetica,sans-serif;
+    background: #1b1b1b;
+    }
+
+.button{
+    display: inline-block;
+    padding: 10px;
+    background-color: #ffd600;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: calc(70% - 1rem);
+}
+
+.content
+{
+    padding: 200px 0px;
+}
+
+.button:hover{
+    background-color: black;
+    color: #ffd600;
+}

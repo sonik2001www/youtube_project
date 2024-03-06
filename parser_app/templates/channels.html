@@ -1,0 +1,102 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block main_section %}
+<nav class="nav">
+    <div class="container">
+        <div class="nav-body">
+            <ul class="burger">
+                <li class="burger__item"></li>
+                <li class="burger__item"></li>
+                <li class="burger__item"></li>
+            </ul>
+            <form method="POST" class="search__box">
+                {% csrf_token %}
+                <div class="search__box">
+                    <div class="search__input">
+                        {% render_field form.query class="search__field" autocomplete="off" spellcheck="false" placeholder="Search" %}
+                    </div>
+                    <div class="search__filter" data-drop>
+                        <div class="filter__box" data-dropBtn>
+                            <div class="filter-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 32 32" id="filter">
+                                    <path d="M2 7h.142a3.981 3.981 0 0 0 7.716 0H30a1 1 0 0 0 0-2H9.858a3.981 3.981 0 0 0-7.716 0H2a1 1 0 0 0 0 2zm4-3a2 2 0 1 1-2 2 2 2 0 0 1 2-2zm24 11h-.142a3.981 3.981 0 0 0-7.716 0H2a1 1 0 0 0 0 2h20.142a3.981 3.981 0 0 0 7.716 0H30a1 1 0 0 0 0-2zm-4 3a2 2 0 1 1 2-2 2 2 0 0 1-2 2zm4 7H19.858a3.981 3.981 0 0 0-7.716 0H2a1 1 0 0 0 0 2h10.142a3.981 3.981 0 0 0 7.716 0H30a1 1 0 0 0 0-2zm-14 3a2 2 0 1 1 2-2 2 2 0 0 1-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="filter-text">Filter</div>
+                        </div>
+                        <div class="filter-menu dropmenu" data-dropMenu>
+                            <div class="filter-menu__content">
+                                <div class="filter-menu__top">
+                                    <label class="filter-menu__label main-text-title">Country
+                                        code:</label>
+                                    <div class="dropdown">
+                                        <button class="dropdown__button main-text" type="button">
+                                            {{ form.country.value }}
+                                        </button>
+                                        <ul class="dropdown__list">
+                                            {% for value, label in form.country.field.choices %}
+                                            <li class="dropdown__list-item {% if form.country.value == value %}dropdown__list-item_active{% endif %}"
+                                                data-value="{{ value }}">
+                                                {{ label }}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                        {{ form.country }}
+                                    </div>
+                                </div>
+                                <div class="filter-menu__body">
+                                    <div class="filter-menu__box">
+                                        <label class="filter-menu__label main-text-title">Less
+                                            than:</label>
+                                        <div class="filter-menu__input">
+                                            {% render_field form.less_than autocomplete="off" spellcheck="false" placeholder="Top bound" %}
+                                        </div>
+                                    </div>
+                                    <div class="filter-menu__box">
+                                        <label class="filter-menu__label main-text-title">More
+                                            than:</label>
+                                        <div class="filter-menu__input">
+                                            {% render_field form.more_than autocomplete="off" spellcheck="false" placeholder="Bottom bound" %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="search__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                            <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="2" transform="translate(1 1)">
+                                <circle cx="7.5" cy="7.5" r="7.5"></circle>
+                                <path d="M18 18l-5.2-5.2"></path>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</nav>
+<section class="main__section">
+    <div class="container">
+        <!-- creators -->
+        <div class="main-block">
+            <div class="search__wrapper">
+                <table class="styled-table-creator">
+                    <tbody>
+                    {% include 'layouts/channels_cycle.html' %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="show__more-btn">
+                <button>Find more</button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block bottom_section %}
+<script src="{% static 'js/load.js' %}"></script>
+<script src="{% static 'js/channels-search.js' %}"></script>
+{% endblock %}

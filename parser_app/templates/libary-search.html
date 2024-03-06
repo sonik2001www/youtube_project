@@ -1,0 +1,141 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block main_section %}
+    <section class="main__section">
+        <div class="container">
+            <div class="main-block">
+                <!-- livaty table -->
+                <div class="search__wrapper">
+                    <table class="styled-table">
+                        <!-- table head -->
+                        <thead>
+                        <tr>
+                            <th class="sort-first">
+                                {% if sort_field == 'logo' %}
+                                <a href="{% url 'libary_search' sort_field='-logo' %}">Logo</a>
+                                {% else %}
+                                <a href="{% url 'libary_search' sort_field='logo' %}">Logo</a>
+                                {% endif %}
+                            </th>
+                            <th class="sort-first">
+                                {% if sort_field == 'name' %}
+                                <a href="{% url 'libary_search' sort_field='-name' %}">Brand name</a>
+                                {% else %}
+                                <a href="{% url 'libary_search' sort_field='name' %}">Brand name</a>
+                                {% endif %}
+                            </th>
+                            <th class="sort-first">
+                                {% if sort_field == 'domain' %}
+                                <a href="{% url 'libary_search' sort_field='-domain' %}">Domain</a>
+                                {% else %}
+                                <a href="{% url 'libary_search' sort_field='domain' %}">Domain</a>
+                                {% endif %}
+                            </th>
+                            <th class="sort-first">
+                                {% if sort_field == 'industries' %}
+                                <a href="{% url 'libary_search' sort_field='-industries' %}">Industries</a>
+                                {% else %}
+                                <a href="{% url 'libary_search' sort_field='industries' %}">Industries</a>
+                                {% endif %}
+                            </th>
+                            <th class="sort-first">
+                                {% if sort_field == 'country' %}
+                                <a href="{% url 'libary_search' sort_field='-country' %}">Country</a>
+                                {% else %}
+                                <a href="{% url 'libary_search' sort_field='country' %}">Country</a>
+                                {% endif %}
+                            </th>
+                        </tr>
+                        </thead>
+                        <!-- table body -->
+                        <tbody>
+                            {% for brand in page %}
+                                <tr class="active-row">
+									<td><a href="http://{{ brand.domain }}" class="libary__logo" target="_blank"><img src="{{ brand.logo.url }}" alt="logo"></a></td>
+									<td><a href="http://{{ brand.domain }}" class="main-text" target="_blank">{{ brand.name }}</a></td>
+									<td><a href="http://{{ brand.domain }}" class="main-text" target="_blank">{{ brand.domain }}</a></td>
+									<td><a href="http://{{ brand.domain }}" class="main-text" target="_blank">{{ brand.industries }}</a></td>
+									<td><a href="http://{{ brand.domain }}" class="main-text" target="_blank">{{ brand.country }}</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="pagination">
+                <p>Brands: {{ count }}</p>
+                <form method="GET">
+                    Rows per page:
+                    <input
+                        type="text"
+                        name="size"
+                        title="to change the page size enter a new value"
+                        placeholder="{{ size }}"
+                        autocomplete="off"
+                        spellcheck="false"
+                        minlength="1"
+                        maxlength="2"
+                        required
+                    />
+                    <button title="to change the page size enter a new value">
+                        Apply
+                    </button>
+                </form>
+                <ul class="pagination__items">
+                    {% if page.has_previous %}
+                        <li class="page-item previous">
+                            <a href="?page={{ page.previous_page_number }}&size={{ size }}" class="page-link">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item previous disabled">
+                            <a href="#" class="page-link disabled" aria-disabled="true">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {% if page.number > 3 %}
+                        <li class="page-item">
+                            <a href="?page=1&size={{ size }}" class="page-link">1</a>
+                        </li>
+                        {% if page.number > 4 %}
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link">...</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+
+                    {% for i in page.paginator.page_range %}
+                        {% if i > page.number|add:-3 and i < page.number|add:3 %}
+                            <li class="page-item {% if page.number == i %}active{% endif %}">
+                                <a href="?page={{ i }}&size={{ size }}" class="page-link">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page.number < page.paginator.num_pages|add:-2 %}
+                        {% if page.number < page.paginator.num_pages|add:-3 %}
+                            <li class="page-item disabled">
+                                <a href="#" class="page-link">...</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item">
+                            <a href="?page={{ page.paginator.num_pages }}&size={{ size }}" class="page-link">{{ page.paginator.num_pages }}</a>
+                        </li>
+                    {% endif %}
+
+                    {% if page.has_next %}
+                        <li class="page-item next">
+                            <a href="?page={{ page.next_page_number }}&size={{ size }}" class="page-link">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item next disabled">
+                            <a href="#" class="page-link disabled" aria-disabled="true">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </section>
+{% endblock %}

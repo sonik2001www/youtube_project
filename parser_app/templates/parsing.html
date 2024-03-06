@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <title>Parsing</title>
+</head>
+<body style="color: #696969;
+    font: normal 10pt Arial,Helvetica,sans-serif;
+    background: #2b2b2b;">
+
+{% include "heder.html" %}
+
+{% if user.is_authenticated %}
+
+<div class="row ">
+
+    <div class="col-3"></div>
+        <div class="col-6">
+                <form method="POST" class="signup" style="padding: 30px; border: 10px solid; margin: 10px;">
+                    <h3 class="text-center">Add Keyword and Date</h3>
+                    {% if true_latest_keyword == "keyword" %}
+                    <p class="text-center" style="color: red">Add a new keyword:</p>
+                    {% else %}
+                    <p class="text-center">{{ true_latest_keyword }}, to change a keyword, enter a new one:</p>
+                    {% endif %}
+                    <p class="text-center">{{ date }}, to change a date, enter a new one:</p>
+                    {% csrf_token %}
+                    <div class="d-flex" >
+                          <div class="col-6">
+                              <p style="text-align: end; margin: 0px 5px;"><label class="form-label">Keyword:</label></p>
+                          </div>
+                          <div class="col-6">
+                              <p>{{ form.name|attr:"class:your-custom-class" }}</p>
+                          </div>
+                    </div>
+                    <div class="d-flex" >
+                          <div class="col-6">
+                              <p style="text-align: end; margin: 0px 5px;"><label class="form-label">Channel Name:</label></p>
+                          </div>
+                          <div class="col-6">
+                              <p>{{ form.channel_name|attr:"class:your-custom-class2" }}</p>
+                          </div>
+                    </div>
+                    <div class="d-flex" >
+                          <div class="col-6">
+                              <p style="text-align: end; margin: 0px 5px;"><label class="form-label">Date After:</label></p>
+                          </div>
+                          <div class="col-6">
+                              <p>{{ form.value_after|attr:"class:your-custom-class2" }}</p>
+                          </div>
+                      </div>
+                      <div class="d-flex" >
+                          <div class="col-6">
+                              <p style="text-align: end; margin: 0px 5px;"><label class="form-label">Date Before:</label></p>
+                          </div>
+                          <div class="col-6">
+                              <p>{{ form.value_before|attr:"class:your-custom-class2" }}</p>
+                          </div>
+                      </div>
+                      <div class="text-center">
+                        <button class="btn btn-warning" type="submit">Add</button>
+                      </div>
+                </form>
+            <div style="padding: 30px; border: 10px solid; margin: 10px">
+                <div class="row">
+                    <h3>Parsing:</h3>
+                    <div class="col-4 forms">
+                        <form method="post" action="{% url 'search' %}">
+                            {% csrf_token %}
+                            <button class="btn btn-warning" type="submit">search</button>
+                        </form>
+                    </div>
+                    <div class="col-4 forms">
+                        <form method="post" action="{% url 'check' %}">
+                            {% csrf_token %}
+                            <button class="btn btn-warning" type="submit">check</button>
+                        </form>
+                    </div>
+                    <div class="col-4 forms">
+                        <form method="post" action="{% url 'remove' %}">
+                            {% csrf_token %}
+                            <button class="btn btn-warning" type="submit">remove</button>
+                        </form>
+                    </div>
+                </div>
+                <div style="padding: 30px 0px">
+                    <h3>Parsing all buttons:</h3>
+                    <div class="forms">
+                        <form method="post" action="{% url 'all_buttons' %}">
+                            {% csrf_token %}
+                            <button class="btn btn-warning" type="submit">Click here</button>
+                        </form>
+                    </div>
+                </div>
+           </div>
+
+
+{% for video in videos %}
+            <div class="d-flex" style="padding: 10px; border: 5px solid; margin: 10px">
+                <div>
+                    <img src="{{ video.thumbnails_medium_url }}">
+                </div>
+
+
+                <div style="padding: 0px 30px;">
+                <h4>{{ video.video_name }}</h4>
+                <h5>Video info:</h5>
+                <p>{{ video.url }}</p>
+                <p>{{ video.published }}</p>
+                <p>Views: {{ video.view_count }}</p>
+                <h5>Chanel info:</h5>
+                <p>Subscribers: {{ video.channel_subscriber_count }}</p>
+                <p>Country: {{ video.channel_country }}</p>
+                </div>
+            </div>
+{% endfor %}
+
+
+        </div>
+    <div class="col-3">
+    </div>
+</div>
+
+{% else %}
+    <div class="content">
+        <h2 class="text-center">Log in please)</h2>
+    </div>
+{% endif %}
+
+<style>
+.your-custom-class {
+
+  width: 70%; /* Ширина */
+
+}
+
+.your-custom-class2 {
+
+  width: 40%; /* Ширина */
+
+}
+
+</style>
+
+</body>
+</html>
+{% endblock content %}

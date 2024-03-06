@@ -1,0 +1,78 @@
+.support__acarddeons{
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20rem;
+    margin-top: 20rem;
+}
+.support__wrapper{
+    border-radius: var(--border-raduis-main);
+    overflow: hidden;
+    border: 1rem solid var(--border-grey-light);
+    max-width: 1300rem;
+    width: 100%;
+    margin: 0 auto;
+    display: table;
+    border-collapse: collapse;
+}
+.support__header{
+    position: relative;
+    cursor: pointer;
+    background-color: var(--background-main);
+    border-bottom: 1rem solid var(--border-grey-light);
+
+    -webkit-transition: var(--transition-1);
+    -moz-transition: var(--transition-1);
+    -o-transition: var(--transition-1);
+    -ms-transition: var(--transition-1);
+    transition: var(--transition-1);
+}
+.support__header::after{
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    padding: 0 10rem;
+    width: 20rem;
+    height: 20rem;
+    background-image: url('../../templates/images/plus.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    -webkit-transition: var(--transition-1);
+    -moz-transition: var(--transition-1);
+    -o-transition: var(--transition-1);
+    -ms-transition: var(--transition-1);
+    transition: var(--transition-1);
+}
+.acarddeon__toggler-isActive.support__header::after{
+    background-image: url('../../templates/images/minus.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.acarddeon__toggler-isActive.support__header{
+    border-bottom: 1rem solid var(--border-grey-light);
+}
+.support__header span{
+    display: inline-block;
+    padding: 20rem 45rem 20rem 20rem;
+    font-size: var(--fontSize-middle);
+}
+.support__items{
+    padding: 0 20rem 0 40rem;
+}
+.support__item{
+    padding: 20rem 0;
+}
+.support__item:not(:first-child){
+    border-top: 1rem solid var(--border-grey-light);
+}
+.support__item h5,
+.support__item span{
+    font-size: var(--fontSize-middle);
+}

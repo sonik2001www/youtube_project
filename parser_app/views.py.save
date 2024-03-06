@@ -1,0 +1,678 @@
+import json
+import re
+import requests
+from pprint import pprint
+from parser_app import forms
+from datetime import datetime
+from parser_app import models
+from parser_app.modules import parser, gmail_sender
+from django.urls import reverse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator, EmptyPage
+from django.http import HttpResponseNotFound, HttpResponse
+from django.contrib.auth.models import User
+from django.contrib import messages
+from datetime import timedelta
+from django.utils import timezone
+from django.http import HttpResponse
+from io import BytesIO
+from django.template.loader import get_template
+import pdfkit
+import os
+
+from youtube_project import settings
+
+
+def parsing(request):
+    if not request.user.is_authenticated:
+        redirect(reverse('account_login'))
+    try:
+        latest_keyword = models.Keyword.objects.latest('id')
+        if latest_keyword.status == 'New':
+            true_latest_keyword = str(latest_keyword.name)
+        else:
+            true_latest_keyword = 'keyword'
+    except:
+        true_latest_keyword = 'keyword'
+
+    channel_name = str(models.Settings.objects.get(name='Channel Name').value)
+    date_after = str(models.Settings.objects.get(name='Date After').value)
+    date_before = str(models.Settings.objects.get(name='Date Before').value)
+    date = date_after + ' / ' + date_before
+
+    if request.method == 'POST':
+        form = forms.KeywordForm(request.POST)
+        if form.is_valid():
+            models.Keyword.objects.create(
+                name=form.cleaned_data['name']
+            )
+            a = models.Settings.objects.get(name='Date After')
+            a.value = form.cleaned_data['value_after']
+            a.save()
+            b = models.Settings.objects.get(name='Date Before')
+            b.value = form.cleaned_data['value_before']
+            b.save()
+            c = models.Settings.objects.get(name='Channel Name')
+            c.value = form.cleaned_data['channel_name']
+            c.save()
+        return redirect('home')
+    else:
+        form = forms.KeywordForm()
+        form.initial['name'] = true_latest_keyword
+        form.initial['channel_name'] = channel_name
+        form.initial['value_after'] = date_after
+        form.initial['value_before'] = date_before
+
+    videos = models.Video.objects.filter(owner__user=request.user.id).order_by('-id')[:50]
+
+    return render(request, 'parsing.html', locals())
+
+
+def user_profile(request):
+    
+    #######################################################################################################
+    # fix an error : django.contrib.auth.models.User.profile.RelatedObjectDoesNotExist: User has no profile.
+    # from django.contrib.auth.models import User
+    try:
+        profile = request.user.profile
+        quota = profile.quota
+        if not quota:
+            quota = models.Quota.objects.get(name='default')
+            profile.quota = quota
+            profile.save()
+    except User.profile.RelatedObjectDoesNotExist:
+        # Create a profile for the user if it doesn't exist
+        profile = models.Profile.objects.create(user=request.user)
+        quota = models.Quota.objects.get(name='default')
+        profile.quota = quota
+        profile.save()
+    #########################################################################################################
+
+    if request.method == 'GET':
+        quota_id = request.GET.get('quota_id')
+        if quota_id:
+            quota = models.Quota.objects.get(pk=quota_id)
+            profile.quota = quota
+            profile.save()
+            messages.success(request, 'Your plan and quota have been successfully changed...')
+            return redirect('user_profile') 
+
+    username = request.user.username
+    email = request.user.email
+    date_joined = request.user.date_joined
+    quota = request.user.profile.quota
+
+    video_requests = profile.video_requests
+    search_requests = profile.search_requests
+    channel_requests = profile.channel_requests
+    total_requests = profile.total_requests
+    plan_start = profile.plan_start
+    plan_expired_on = profile.plan_expired_on
+    plan_limit = quota.requests
+    plan_status = profile.payment
+
+    if plan_start:
+        plan_remaining_time = plan_expired_on - timezone.now()
+
+        # sending an email if plan has allready expired or 3 (or less) days left
+        writer = gmail_sender.GmailSender()
+
+        if timedelta(seconds=1) > plan_remaining_time:
+            profile.plan_expired = True
+            profile.save()
+            writer.send_plan_expired_warning(receiver=email)
+        elif plan_remaining_time >= timedelta(days=3):
+            writer.send_plan_3days_warning(receiver=email)
+    else:
+        plan_remaining_time = 'undefined'
+
+    if request.method == 'POST':
+        form = forms.ProfilePhotoForm(
+            request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            return redirect('user_profile')
+    else:
+        form = forms.ProfilePhotoForm(instance=profile)
+
+    context = {
+        'username': username,
+        'email': email,
+        'date_joined': date_joined,
+        'quota': quota,
+        'form': form,
+        'video_requests': video_requests,
+        'search_requests': search_requests,
+        'channel_requests': channel_requests,
+        'total_requests': total_requests,
+        'plan_start': plan_start,
+        'plan_expired_on': plan_expired_on,
+        'plan_remaining_time': plan_remaining_time,
+        'plan_status': plan_status,
+        'plan_limit': plan_limit,
+    }
+
+    return render(request, 'account.html', context)
+
+
+def load_videos(request, limit: int, offset: int):
+    videos = models.Video.objects.all()[offset : offset+limit]
+    if (len(videos) == 0):
+        return HttpResponseNotFound()
+
+    return render(request, 'layouts/videos_cycle.html', {'videos': videos})
+
+
+def video_output(request):
+    date_after = models.Settings.objects.get(name='Date After')
+    date_before = models.Settings.objects.get(name='Date Before')
+    form = forms.SearchVideoForm()
+
+    if request.method == 'POST':
+        form = forms.SearchVideoForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['search_by'] == 'channel_id':
+                channel_value = form.cleaned_data['query']
+                keyword_value = ''
+            else:
+                channel_value = ''
+                keyword_value = form.cleaned_data['query']
+            models.Keyword.objects.create(name=keyword_value)
+
+            channel = models.Settings.objects.get(name='Channel Name')
+            channel.value = channel_value
+            channel.save()
+
+            date_after.value = form.cleaned_data['date_after']
+            date_after.save()
+
+            date_before.value = form.cleaned_data['date_before']
+            date_before.save()
+
+            if not request.user.profile.payment or request.user.profile.plan_expired:
+                messages.warning(request, 'Your plan is not payed, pay your plan to enable your requests limits...')
+                return redirect('user_profile')
+            elif 'limit' == parser.search_videos(request.user.id) or 'limit' == parser.add_video_data(request.user.id):
+                messages.warning(request, 'Your requests quota has exhausted, upgrade your plan to increase your requests limits...')
+                return redirect('pracing')
+            else:
+                parser.remove_websites()
+                return redirect('video_output')
+
+    context = {
+        'username': request.user.username,
+        'videos': models.Video.objects.filter(owner=request.user.id)[:15],
+        'form': form,
+        'date_after': date_after.value,
+        'date_before': date_before.value,
+    }
+    return render(request, 'videos.html', context)
+
+
+def load_channels(request, limit: int, offset: int):
+    channels = models.Channel.objects.all().select_related('country')[offset : offset+limit]
+    if (len(channels) == 0):
+        return HttpResponseNotFound()
+
+    return render(request, 'layouts/channels_cycle.html', {'channels': channels})
+
+
+def channels_output(request):
+    form = forms.SearchChannelsForm()
+
+    if request.method == 'POST':
+        form = forms.SearchChannelsForm(request.POST)
+        if form.is_valid():
+            if not request.user.profile.payment or request.user.profile.plan_expired:
+                messages.warning(request, 'Your plan is not payed, pay your plan to enable your requests limits...')
+                return redirect('user_profile')
+
+            elif 'limit' == parser.search_channels(
+                user_id=request.user.id,
+                query=form.cleaned_data['query'],
+                less_than=form.cleaned_data['less_than'],
+                more_than=form.cleaned_data['more_than'],
+                country_code=form.cleaned_data['country'],
+            ):
+                messages.warning(request, 'Your requests quota has exhausted, upgrade your plan to increase your limit...')
+                return redirect('pracing')
+            else:
+                return redirect('channels_output')
+
+    context = {
+        'username': request.user.username,
+        'channels': models.Channel.objects.filter(owner=request.user.id).select_related('country')[:15],
+        'form': form
+    }
+    return render(request, 'channels.html', context)
+
+
+def pars(request):
+    return render(request, 'dashboard.html', {'username': request.user.username})
+
+
+def tools(request):
+    return render(request, 'tools.html', {'username': request.user.username})
+
+
+def creator_overview(request, channel_id: str):
+    try:
+        channel = models.Channel.objects.get(channel_id=channel_id)
+    except:
+        return HttpResponseNotFound()
+
+    brands = set()
+    for video in models.Video.objects.filter(channel_id=channel_id):
+        for brand in models.Brand.objects.all():
+            sites = ' '.join(video.websites_list)
+            print(brand.domain, '\n', sites)
+            if brand.domain.split('.', maxsplit=1)[1] in sites:
+                brands.add(brand)
+
+    context = {
+        'username': request.user.username,
+        'channel': channel,
+        'brands': brands,
+    }
+    return render(request, 'creator-overview.html', context)
+
+
+def libary_search(request, sort_field):
+    try:
+        size = int(request.GET.get('size'))
+        assert size > 0
+    except:
+        size = 15
+
+    try:
+        page_number = int(request.GET.get('page'))
+        assert page_number > 0
+    except:
+        page_number = 1
+
+    queryset = models.Brand.objects.all()
+
+    # set default sort method 
+    if not sort_field:
+        sort_field = 'name'
+
+    queryset = models.Brand.objects.all().order_by(sort_field)
+    paginator = Paginator(queryset, size)
+
+    try:
+        page = paginator.page(page_number)
+    except EmptyPage:
+        return redirect('libary_search')
+
+    username = request.user.username
+    count = models.Brand.objects.all().count()
+    start = (page_number - 1)*size + 1
+    end = page_number*size if count > page_number*size else count
+
+    return render(request, 'libary-search.html', locals())
+
+
+def pracing(request):
+    context = {
+        'username': request.user.username,
+        'low_quota': models.Quota.objects.get(name='Low'),
+        'medium_quota': models.Quota.objects.get(name='Medium'),
+        'pro_quota': models.Quota.objects.get(name='Pro'),
+    }
+    return render(request, 'pracing.html', context)
+
+
+def search(request):
+    if request.method == 'POST':
+        if not request.user.profile.payment or request.user.profile.plan_expired:
+            messages.warning(request, 'Your plan is not payed, pay your plan to enable your requests limits...')
+            return redirect('user_profile')
+        elif 'limit' == parser.search_videos(user_id=request.user.id):
+            messages.warning(request, 'Your requests quota has exhausted, upgrade your plan to increase your limit...')
+            return redirect('pracing')
+        else:
+            return redirect('pars')
+
+
+def check(request):
+    if request.method == 'POST':
+        if not request.user.profile.payment or request.user.profile.plan_expired:
+            messages.warning(request, 'Your plan is not payed, pay your plan to enable your requests limits...')
+            return redirect('user_profile')        
+        elif 'limit' == parser.add_video_data(user_id=request.user.id):
+            messages.warning(request, 'Your requests quota has exhausted, upgrade your plan to increase your limit...')
+            return redirect('pracing')
+
+        else:
+            return redirect('pars')
+
+
+def remove(request):
+    parser.remove_websites()
+    return redirect('pars')
+
+
+def all_buttons(request):
+    if request.method == 'POST':
+        if not request.user.profile.payment or request.user.profile.plan_expired:
+            messages.warning(request, 'Your plan is not payed, pay your plan to enable your requests limits...')
+            return redirect('user_profile')        
+        elif 'limit' == parser.search_videos(user_id=request.user.id) or 'limit' == parser.add_video_data(user_id=request.user.id):
+            messages.warning(request, 'Your requests quota has exhausted, upgrade your plan to increase your limit...')
+            return redirect('pracing')
+
+        else:
+            parser.remove_websites()
+
+            return redirect('video_output')
+
+
+def delete_quota(request):
+    profile = request.user.profile
+    profile.plan_start = None
+    profile.plan_expired_on = None
+    profile.quota = models.Quota.objects.get(name='default')
+    profile.payment = False
+    print(profile.payment)
+    profile.save()
+
+    return redirect('user_profile')
+
+
+def delete_photo(request):
+    profile = request.user.profile
+    profile.profile_photo = None
+    profile.save()
+
+    return redirect('user_profile')
+
+
+def add_remove(request):
+    website = request.GET.get('website')
+    if website:
+        models.Remove.objects.create(name=website)
+
+    return HttpResponse('Success')
+
+
+def payment(request):
+    profile = request.user.profile
+    if not profile.quota.name == 'default':
+        profile.plan_start = timezone.now()
+        profile.plan_expired_on = timezone.now() + timedelta(days=30)
+        profile.payment = True
+        profile.save()
+        messages.success(request, 'Your plan was purchased successfully...')
+
+    return redirect('user_profile')
+
+
+def support(request):
+    form = forms.FeedBackForm()
+    if request.method == 'POST':
+        form = forms.FeedBackForm(request.POST)
+        writer = gmail_sender.GmailSender()
+
+        if form.is_valid():
+            user_email = request.user.email
+            title = form.cleaned_data['title']
+            category = form.cleaned_data['category']
+            text = form.cleaned_data['text']
+
+            writer.send_feedback_from_user(user_email=user_email, title=title, category=category,text=text)
+            return redirect('support')
+
+    return render(request, 'support.html', {'username': request.user.username, 'form': form})
+
+
+def add_deal(request):
+    add_deal_form = forms.AddDealForm()
+    if request.method == 'POST':
+        add_deal_form = forms.AddDealForm(request.POST)
+        print(add_deal_form.is_valid())
+        if add_deal_form.is_valid():
+            defaults = {
+                'brand': add_deal_form.cleaned_data.get('brand'),
+                'status': add_deal_form.cleaned_data.get('status'),
+                'date': add_deal_form.cleaned_data.get('date'),
+                'email': add_deal_form.cleaned_data.get('email'),
+                'phone_number': add_deal_form.cleaned_data.get('phone_number'),
+                'rated_quoted': add_deal_form.cleaned_data.get('rated_quoted'),
+                'counter_offer': add_deal_form.cleaned_data.get('counter_offer'),
+                'agreed_rate': add_deal_form.cleaned_data.get('agreed_rate'),
+                'introduction': add_deal_form.cleaned_data.get('introduction'),
+                'pitch': add_deal_form.cleaned_data.get('pitch'),
+                'views_impressions': add_deal_form.cleaned_data.get('views_impressions'),
+                'views_amount': add_deal_form.cleaned_data.get('views_amount'),
+                'affiliate_check': add_deal_form.cleaned_data.get('affiliate_check'),
+                'affiliate_link': add_deal_form.cleaned_data.get('affiliate_link'),
+                'commissions': add_deal_form.cleaned_data.get('commissions'),
+            }
+            obj, created = models.DealInfo.objects.get_or_create(name=add_deal_form.cleaned_data.get('name'), defaults=defaults)
+            messages.success(request, message='Deal cuccessfully saved...')
+            return redirect('deals')
+        else:
+            print(add_deal_form.errors)
+
+    context = {'add_deal_form': add_deal_form}
+    return render(request, 'deals/add-deal.html', context=context)
+
+
+def deal(request):
+    try:
+        size = int(request.GET.get('size'))
+        assert size > 0
+    except:
+        size = 15
+
+    try:
+        page_number = int(request.GET.get('page'))
+        assert page_number > 0
+    except:
+        page_number = 1
+
+    queryset = models.DealInfo.objects.filter(archive=False)
+
+    paginator = Paginator(queryset, size)
+
+    try:
+        page = paginator.page(page_number)
+    except EmptyPage:
+        return redirect('deals')
+
+    username = request.user.username
+    count = models.Brand.objects.all().count()
+    start = (page_number - 1)*size + 1
+    end = page_number*size if count > page_number*size else count
+    # context = {'deals': deals, 'page': page, 'size': size}
+    return render(request, 'deals/deal.html', locals())
+
+
+def deals_in_archive(request):
+    try:
+        size = int(request.GET.get('size'))
+        assert size > 0
+    except:
+        size = 15
+
+    try:
+        page_number = int(request.GET.get('page'))
+        assert page_number > 0
+    except:
+        page_number = 1
+
+    queryset = models.DealInfo.objects.filter(archive=True)
+
+    paginator = Paginator(queryset, size)
+
+    try:
+        page = paginator.page(page_number)
+    except EmptyPage:
+        return redirect('deals_archive')
+
+    username = request.user.username
+    count = models.Brand.objects.all().count()
+    start = (page_number - 1)*size + 1
+    end = page_number*size if count > page_number*size else count
+    # context = {'deals': deals, 'page': page, 'size': size}
+    return render(request, 'deals/deal-archive.html', locals())
+
+
+def update_deal(request, obj_id):
+    instance = get_object_or_404(models.DealInfo, id=obj_id)
+    form = forms.AddDealForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        form.save()
+        return redirect('deals')
+    return render(request, 'deals/add-deal.html', {'add_deal_form': form})
+
+
+def delete_deal(request, obj_id):
+    delete_obj = get_object_or_404(models.DealInfo, id=obj_id)
+    delete_obj.delete()
+    return redirect('deals')
+
+
+def clone_deal(request, obj_id):
+    original = get_object_or_404(models.DealInfo, id=obj_id)
+    clone = models.DealInfo.objects.create(
+        brand=original.brand,
+        date=original.date,
+        status=original.status,
+        name=original.name,
+        email=original.email,
+        phone_number=original.phone_number,
+        rated_quoted=original.rated_quoted,
+        counter_offer=original.counter_offer,
+        agreed_rate=original.agreed_rate,
+        introduction=original.introduction,
+        pitch=original.pitch,
+        views_impressions=original.views_impressions,
+        views_amount=original.views_amount,
+        affiliate_check=original.affiliate_check,
+        affiliate_link=original.affiliate_link,
+        commissions=original.commissions,
+    )
+    return redirect('deals')
+
+
+def archive_deal(request, obj_id):
+    delete_obj = get_object_or_404(models.DealInfo, id=obj_id)
+    delete_obj.archive = True
+    delete_obj.save()
+    return redirect('deals_archive')
+
+
+def archived_archive_deal(request, obj_id):
+    delete_obj = get_object_or_404(models.DealInfo, id=obj_id)
+    delete_obj.archive = False
+    delete_obj.save()
+    return redirect('deals')
+
+
+def calendar(request):
+    deals = list(models.DealInfo.objects.filter(archive=False).values())
+    return render(request, 'deals/calendar.html', {"deals": deals})
+
+
+def calculate_value(value, value_changer, subtotal):
+    if value:
+        if not value_changer:
+            return subtotal * (value / 100)
+        else:
+            return value
+    return 0
+
+
+def invoice(request):
+    formset = forms.ItemFormSet()
+    if request.method == 'POST':
+        form = forms.InvoiceForm(request.POST, request.FILES)
+        formset = forms.ItemFormSet(data=request.POST)
+
+        if form.is_valid() and formset.is_valid():
+            formset_items = []
+            subtotal = 0
+            math_discount = 0
+            math_tax = 0
+
+            for item_form in formset:
+                item_description = item_form.cleaned_data.get('item_description')
+                quantity = item_form.cleaned_data.get('quantity') or 1
+                rate = item_form.cleaned_data.get('rate') or 0
+                amount = quantity * rate
+                subtotal += amount
+                formset_items.append([item_description, quantity, rate, amount])
+
+            invoice_from = form.cleaned_data.get('invoice_from')
+            bill_to = form.cleaned_data.get('bill_to')
+            ship_to = form.cleaned_data.get('ship_to')
+            invoice_tag = form.cleaned_data.get('invoice_tag')
+            date = form.cleaned_data.get('date') or datetime.now().date()
+            due_date = form.cleaned_data.get('due_date')
+            payment_terms = form.cleaned_data.get('payment_terms')
+            po_number = form.cleaned_data.get('po_number')
+            notes = form.cleaned_data.get('notes')
+            terms = form.cleaned_data.get('terms')
+            discount = form.cleaned_data.get('discount')
+            discount_changer = form.cleaned_data.get('discount_changer')
+            shipping = form.cleaned_data.get('shipping')
+            tax = form.cleaned_data.get('tax')
+            tax_changer = form.cleaned_data.get('tax_changer')
+            amount_paid = form.cleaned_data.get('amount_paid')
+
+            math_discount = calculate_value(discount, discount_changer, subtotal)
+            math_tax = calculate_value(tax, tax_changer, subtotal)
+
+            total = subtotal - math_discount + math_tax + shipping
+            balance_due = total - amount_paid
+
+            logo = form.cleaned_data.get('logo')
+            saved_logo_path = None
+            if logo:
+                saved_logo_path = os.path.join(settings.MEDIA_ROOT, logo.name)
+                with open(saved_logo_path, 'wb') as f:
+                    for chunk in logo.chunks():
+                        f.write(chunk)
+
+            context = {
+                "invoice_from": invoice_from,
+                "bill_to": bill_to,
+                "ship_to": ship_to,
+                "invoice_tag": invoice_tag,
+                "date": date,
+                "due_date": due_date,
+                "payment_terms": payment_terms,
+                "po_number": po_number,
+                "notes": notes,
+                "terms": terms,
+                "discount": discount,
+                "shipping": shipping,
+                "tax": tax,
+                "amount_paid": amount_paid,
+                "items": formset_items,
+                "subtotal": subtotal,
+                "total": total,
+                "balance_due": balance_due,
+            }
+
+            if saved_logo_path:
+                context['image'] = saved_logo_path
+
+            render_html = render(request, "invoice-data.html", context).content.decode('utf-8')
+            config = pdfkit.configuration(wkhtmltopdf='/usr/bin/wkhtmltopdf')
+            pdf_path = os.path.join(settings.MEDIA_ROOT, 'invoice_documents/')
+            os.makedirs(pdf_path, exist_ok=True)
+            pdf_filename = f'invoice_{invoice_tag}.pdf'
+            pdf_output_path = os.path.join(pdf_path, pdf_filename)
+            pdfkit.from_string(
+                render_html,
+                output_path=pdf_output_path,
+                configuration=config,
+                options={"enable-local-file-access": ""},
+            )
+        else:
+            print(form.errors)
+            print(formset.errors)
+
+    return render(request, 'invoice.html', {'form': forms.InvoiceForm, 'formsets': formset})

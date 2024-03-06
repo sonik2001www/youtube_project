@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+    <title>invoice data</title>
+</head>
+
+<body class="">
+    <!-- MAIN SECTION -->
+    <style>
+        td {
+            min-width: 135px;
+        }
+        h1 {
+            font-size: 3rem;
+        }
+    </style>
+    <main>
+        <div class="container mt-3">
+            <div class="">
+                <div class="col-lg-10 mx-auto">
+                    <div class=" p-5">
+                        <table class="">
+                            <tr class="">
+                                <td class="">
+                                    <div class="overflow-hidden">
+                                        {% if image %}
+                                        <img class="w-100" src="{{image}}" alt="img">
+                                        {% else %}
+                                        <img class="w-100"
+                                            src="{% static 'image/scale_logo.png' %}"
+                                            alt="img">
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class=""></td>
+                                <td class=""></td>
+                                <td class=""></td>
+                                <td valign="top" colspan="2" class="">
+                                    <div style="float: right;">
+                                        <h1 class="">INVOICE</h1>
+                                        <span>#{{invoice_tag}}</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="">
+                                <td valign="top" class="">
+                                    <div class="mt-2">
+                                        <span class="fw-bold">Invoice from:</span>
+                                        <div style="white-space: pre-line;">{{ invoice_from }}</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="">
+                                <td valign="top" class="">
+                                    <div class="mt-2">
+                                        <span class="fw-bold">Bill To:</span>
+                                        <div style="white-space: pre-line;">{{ bill_to }}</div>
+                                    </div>
+                                </td>
+                                <td valign="top" class="">
+                                    <div class="mt-2">
+                                        <span class="fw-bold">Ship To:</span>
+                                        <div style="white-space: pre-line;">{{ ship_to }}</div>
+                                    </div>
+                                </td>
+                                <td class=""></td>
+                                <td class=""></td>
+                                <td colspan="2" class="">
+                                    <table class="table">
+                                        <tr>
+                                            <td class="fw-bold">Date:</td>
+                                            <td>{{date}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Payment Terms:</td>
+                                            <td>{{payment_terms}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">Due Date:</td>
+                                            <td>{{due_date}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-bold">PO Number:</td>
+                                            <td>{{po_number}}</td>
+                                        </tr>
+                                        <tr class="bg-dark bg-opacity-10">
+                                            <td class="fw-bold">Balance Due:</td>
+                                            <td class="fw-bold">{{balance_due}} {{currency}}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr class="d-block m-4"></tr>
+                            <tr class="">
+                                <td colspan="3" class="p-2 text-bg-dark"><span class="px-3">Item</span></td>
+                                <td class="p-2 text-bg-dark"><span class="px-3">Quantity</span></td>
+                                <td class="p-2 text-bg-dark"><span class="px-3">Rate {{currency}}</span></td>
+                                <td class="p-2 text-bg-dark"><span class="px-3">Amount {{currency}}</span></td>
+                            </tr>
+                            {% if not items %}
+                            <tr class="">
+                                <td colspan="3" class="p-2 "><p class="px-3">item.0</p></td>
+                                <td class="p-2 "><p class="px-3">item.1</p></td>
+                                <td class="p-2 "><p class="px-3">item.2</p></td>
+                                <td class="p-2 "><p class="px-3">item.3</p></td>
+                            </tr>
+                            {% else %}
+                            {% for item in items %}
+                            <tr>
+                                <td colspan="3" class="p-2 "><p class="px-3">{{item.0}}</p></td>
+                                <td class="p-2 "><p class="px-3">{{item.1}}</p></td>
+                                <td class="p-2 "><p class="px-3">{{item.2}}</p></td>
+                                <td class="p-2 "><p class="px-3">{{item.3}}</p></td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                            <tr class="d-block m-4"></tr>
+                            <tr class="">
+                                <td class=""></td>
+                                <td class=""></td>
+                                <td class=""></td>
+                                <td class=""></td>
+                                <td colspan="2" class="">
+                                    <table class="table">
+                                        {% if subtotal != 0 %}
+                                            <tr>
+                                                <td class="fw-bold">Subtotal:</td>
+                                                <td>{{subtotal}} {{currency}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if discount != 0 %}
+                                            <tr>
+                                                <td class="fw-bold">Discount:</td>
+                                                <td>{{discount}} {{currency}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if tax != 0 %}
+                                            <tr>
+                                                <td class="fw-bold">Tax:</td>
+                                                <td>{{tax}} {{currency}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if shipping != 0 %}
+                                            <tr>
+                                                <td class="fw-bold">Shipping:</td>
+                                                <td>{{shipping}} {{currency}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if total != 0 %}
+                                            <tr>
+                                                <td class="fw-bold">Total:</td>
+                                                <td>{{total}} {{currency}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if amount_paid != 0 %}
+                                            <tr>
+                                                <td class="fw-bold">Amount Paid:</td>
+                                                <td>{{amount_paid}} {{currency}}</td>
+                                            </tr>
+                                        {% endif %}
+                                        {% if balance_due != 0 %}
+                                            <tr>
+                                                <td class="fw-bold">Balance Due:</td>
+                                                <td>{{balance_due}} {{currency}}</td>
+                                            </tr>
+                                        {% endif %}
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="mt-5">
+                            {% if notes %}
+                                <span class="fw-bold">Notes:</span>
+                                <div style="white-space: pre-line;">{{ notes }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="mt-5">
+                            {% if terms %}
+                            <span class="fw-bold">Terms:</span>
+                            <div style="white-space: pre-line;">{{ terms }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

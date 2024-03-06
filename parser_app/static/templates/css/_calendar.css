@@ -1,0 +1,220 @@
+.calendar-container {
+    display: grid;
+    grid-template-columns: 1fr 400rem;
+    column-gap: 30rem;
+}
+@media (max-width: 1500px){
+    .calendar-container {
+       display: flex;
+       flex-direction: column;
+       row-gap: 30rem;
+    }
+}
+.calendar-block__title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30rem;
+}
+.calendar-block__title > .h1{
+    margin: 0;
+    flex: 1 1 auto;
+}
+.pagination-calendar {
+    display: flex;
+    align-items: center;
+    column-gap: 10rem;
+}
+.pagination-calendar__arrows {
+    display: flex;
+    align-items: center;
+    column-gap: 10rem;
+}
+.pagination-calendar__arrow {
+    position: relative;
+    width: 18rem;
+    height: 18rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pagination-calendar__arrow::after{
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../templates/images/arrow.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(-90deg);
+}
+.pagination-calendar__arrow-prev:after{
+    transform: rotate(90deg);
+}
+.calendar-table-container{
+    overflow-x: auto;
+}
+.calendar {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    color: var(--textColor-main);
+}
+.calendar,
+.calendar-header__item,
+.calendar-body__item{
+    border: 1rem solid var(--border-grey);
+}
+.calendar-header__item,
+.calendar-body__item{
+    width: calc(100% / 7);
+}
+.calendar-header__item {
+    min-width: 100rem;
+    padding: 15rem 0;
+    font-weight: 700;
+}
+.calendar-body__item {
+    padding: 5rem 0 77rem 0;
+    height: 100rem;
+    position: relative;
+    transition: all .1s ease;
+    overflow-y: auto;
+}
+.calendar-body__item::-webkit-scrollbar{
+    width: 0;
+}
+.calendar-body__item:hover{
+    background-color: #f1f4fb79;
+}
+.calendar-body__item-disabled {
+    background-color: var(--border-grey-light);
+    border: none;
+}
+.calendar-body__item-active{
+    background-color: var(--accent-second);
+    color: #fff;
+}
+.calendar-body__item-active:hover{
+    background-color: var(--hover-accent-second);
+}
+.calendar-tasks{
+    margin-top: 20rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10rem;
+}
+.calendar-task {
+    position: relative;
+    background-color: #e4c1c16a;
+    color: var(--textColor-main);
+    border-radius: 0 var(--border-raduis-main) var(--border-raduis-main) 0;
+    padding-left: 20rem;
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+    display: flex;
+    align-items: center;
+    column-gap: 5rem;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+.calendar-task:hover{
+    background-color: rgba(231, 153, 153, 0.407);
+}
+.calendar-task::before{
+    content: '';
+    display: inline-block;
+    width: 21rem;
+    height: 15rem;
+    background-image: url('../../templates/images/youtube.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.calendar-task:after{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3rem;
+    background-color: var(--accent);
+}
+.calendar-body-tasks{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(20rem);
+    width: calc(100% - 4rem);
+    display: flex;
+    flex-direction: column;
+    row-gap: 3rem;
+}
+.calendar-body-task {
+    text-align: left;
+    border-radius: 3rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    color: var(--textColor-main);
+} 
+.calendar-body-task::before{
+    width: 20rem;
+    height: 14rem;
+}
+.active-deals-h1{
+    position: relative;
+    display: flex;
+    align-items: center;
+    column-gap: 5rem;
+}
+.active-deals-h1:after{
+    content: '';
+    display: inline-block;
+    width: 25rem;
+    height: 25rem;
+    background-image: url('../../templates/images/info.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+}
+.active-deals__btns {
+    display: flex;
+    align-items: center;
+    border-radius: var(--border-raduis-main);
+    overflow: hidden;
+}
+.active-deals__btn {
+    width: 50%;
+    border-radius: 0;
+}
+.active-deals .main-block{
+    margin-top: 20rem;
+}
+.active-deals-tasks{
+    display: flex;
+    flex-direction: column;
+    row-gap: 20rem;
+}
+.active-deals-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 20rem;
+}
+.active-deals-block .main-text-title {
+    font-size: var(--fontSize-middle);
+}
+.active-deals-block__btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20rem;
+    height: 20rem;
+}
+.active-deals-block__btn:after{
+    content: '';
+    position: absolute;
+    width: 6rem;
+    height: 12rem;
+    background-image: url('../../templates/images/more.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}

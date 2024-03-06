@@ -1,0 +1,411 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block main_section %}
+<form id="form-container" method="post" enctype="multipart/form-data"> {% csrf_token %}
+    <section class="main__section">
+
+        <div class="container container__invoice">
+
+            <!-- add-deal -->
+            <div class="main-block">
+                <div class="invoice__top top-invoice">
+                    <div class="top-invoice__left">
+                        <div class="block-title top-invoice__title-mob">
+                            <h2 class="h1">INVOICE</h2>
+                        </div>
+                        <div class="col top-invoice__logo" style="width: 50%; display: inline-block; overflow: hidden;">
+                            <span>Add your logo</span>
+                            {{ form.logo }}
+                            <div class="col" id="logo-preview" style="display: none; text-align: center;">
+                                <img src="" alt="Logo Preview" style="max-height: 100px; padding: 5px;">
+                            </div>
+                        </div>
+                        <div class="add-deal__box">
+                            <span class="main-text-title ">Invoice from</span>
+                            {{ form.invoice_from }}
+                        </div>
+                        <div class="top-invoice__flex">
+                            <div class="add-deal__box">
+                                <span class="main-text-title ">Bill To</span>
+                                {{ form.bill_to }}
+                            </div>
+                            <div class="add-deal__box">
+                                <span class="main-text-title ">Ship To</span>
+                                {{ form.ship_to }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="top-invoice__right">
+                        <div class="block-title">
+                            <h2 class="h1">INVOICE</h2>
+                        </div>
+                        <div class="add-deal__box add-deal__box-sym">
+                            <span class="top-invoice__sym">#</span>
+                            {{ form.invoice_tag }}
+                        </div>
+                        <div class="top-invoice__right-wrapper">
+                            <!-- calendar -->
+                            <div class="add-deal__input-calendar">
+                                <span class="main-text-title ">Date</span>
+                                <input type="text" name="date" class="add-deal__input add-deal__input-calendar-btn"
+                                    id="id_date">
+                                <div class="calendar-box-container">
+                                    <div class="calendar-box">
+                                        <div class="calendar-box__month">
+                                            <button type="button"
+                                                class="calendar-box__arrow calendar-box__arrow-prev"></button>
+                                            <div class="calendar-box-dropdown dropdown">
+                                                <button class="dropdown__button main-text calendar-box__year"
+                                                    type="button"></button>
+                                                <ul class="calendar-box-dropdown__list dropdown__list">
+                                                </ul>
+                                                <input class="dropdown__input_hidden" type="text" name="select-category"
+                                                    value="" />
+                                            </div>
+                                            <button type="button"
+                                                class="calendar-box__arrow calendar-box__arrow-next"></button>
+                                        </div>
+                                        <div class="calendar-box__days">
+                                            <span>Sun</span>
+                                            <span>Mon</span>
+                                            <span>Tue</span>
+                                            <span>Wed</span>
+                                            <span>Thu</span>
+                                            <span>Fri</span>
+                                            <span>Sat</span>
+                                        </div>
+                                        <div class="calendar-box__dates"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-deal__box">
+                                <span class="main-text-title ">Payment Terms</span>
+                                {{ form.payment_terms }}
+                            </div>
+                            <!-- calendar -->
+                            <div class="add-deal__input-calendar">
+                                <span class="main-text-title ">Due Date</span>
+                                <input type="text" name="date" class="add-deal__input add-deal__input-calendar-btn"
+                                    id="id_date">
+                                <div class="calendar-box-container">
+                                    <div class="calendar-box">
+                                        <div class="calendar-box__month">
+                                            <button type="button"
+                                                class="calendar-box__arrow calendar-box__arrow-prev"></button>
+                                            <div class="calendar-box-dropdown dropdown">
+                                                <button class="dropdown__button main-text calendar-box__year"
+                                                    type="button"></button>
+                                                <ul class="calendar-box-dropdown__list dropdown__list">
+                                                </ul>
+                                                <input class="dropdown__input_hidden" type="text" name="select-category"
+                                                    value="" />
+                                            </div>
+                                            <button type="button"
+                                                class="calendar-box__arrow calendar-box__arrow-next"></button>
+                                        </div>
+                                        <div class="calendar-box__days">
+                                            <span>Sun</span>
+                                            <span>Mon</span>
+                                            <span>Tue</span>
+                                            <span>Wed</span>
+                                            <span>Thu</span>
+                                            <span>Fri</span>
+                                            <span>Sat</span>
+                                        </div>
+                                        <div class="calendar-box__dates"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-deal__box">
+                                <span class="main-text-title ">PO Number</span>
+                                {{ form.po_number }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="invoice__table table-invoice">
+                    <div class="table-invoice__header header-table-invoice">
+                        <div class="header-table-invoice__container">
+                            <table class="invoice-data-table">
+
+                                <thead>
+                                    <tr>
+                                        <th class="main-text-title">Item</th>
+                                        <th class="main-text-title">Quantity</th>
+                                        <th class="main-text-title">Rate</th>
+                                        <th class="main-text-title invoice-table-amount">Amount</th>
+                                    </tr>
+                                </thead>
+                                {{ formsets.management_form }}
+                                {% for formset in formsets %}
+                                <tbody class="header-table-invoice__body">
+                                    <tr class="header-table-invoice__list">
+                                        <td>
+                                            <div class="header-table-invoice__item">
+                                                <input type="text"
+                                                    class="add-deal__input header-table-invoice__input-descr"
+                                                    placeholder="Description of service or product..." maxlength="255">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="header-table-invoice__item">
+                                                <input type="number" value="1"
+                                                    class="add-deal__input header-table-invoice__input-quantity">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="header-table-invoice__item">
+                                                <div
+                                                    class="header-table-invoice__input header-table-invoice__input-tab">
+                                                    <span class="main-text" data-Currency>MXV</span>
+                                                    <input type="number" value="0"
+                                                        class="add-deal__input header-table-invoice__input-rate">
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="header-table-invoice__item header-table-invoice__item-amount">
+                                                <p class="header-table-invoice__text-amount">
+                                                    <span class="main-text header-table-invoice-amount-num">0,00</span>
+                                                    <span class="main-text" data-Currency>MXV</span>
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <div class="header-table-invoice__btn">
+                            <button type="button" class="deal__btn-add btn header-table-invoice__addList">Line Item
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-invoice__body body-table-invoice">
+                        <div class="body-table-invoice__forms">
+                            <div class="body-table-invoice-wrapper">
+                                <div class="add-deal__box">
+                                    <span class="main-text-title">Notes</span>
+                                    {{ form.notes }}
+                                </div>
+                                <div class="add-deal__box">
+                                    <span class="main-text-title">Terms</span>
+                                    {{ form.terms }}
+                                </div>
+                            </div>
+                            <div class="body-table-invoice-wrapper body-table-invoice-wrapper-right">
+                                <div class="add-deal__box">
+                                    <span class="main-text-title">Subtotal</span>
+                                    <p class="body-table-invoice__count">
+                                        <span class="main-text body-table-invoice-subtotal-val">0,00</span>
+                                        <span class="main-text" data-Currency>MXV</span>
+                                    </p>
+                                </div>
+                                <div class="add-deal__box discount">
+                                    <span class="main-text-title">Discount</span>
+                                    <div class="header-table-invoice__input">
+                                        <span class="main-text" data-Currency>MXV</span>
+                                        <input type="number" name="discount" value="0" class="add-deal__input"
+                                            id="id_discount">
+                                        <span hidden="hidden">{{ form.discount_changer }}</span>
+                                        <button type="button" class="body-table-invoice__inpbtn">
+                                            <svg class="svg-inline--fa fa-repeat" aria-hidden="true" focusable="false"
+                                                data-prefix="fas" data-icon="repeat" role="img"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                                data-fa-i2svg="">
+                                                <path fill="currentColor"
+                                                    d="M0 224c0 17.7 14.3 32 32 32s32-14.3 32-32c0-53 43-96 96-96H320v32c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l64-64c12.5-12.5 12.5-32.8 0-45.3l-64-64c-9.2-9.2-22.9-11.9-34.9-6.9S320 19.1 320 32V64H160C71.6 64 0 135.6 0 224zm512 64c0-17.7-14.3-32-32-32s-32 14.3-32 32c0 53-43 96-96 96H192V352c0-12.9-7.8-24.6-19.8-29.6s-25.7-2.2-34.9 6.9l-64 64c-12.5 12.5-12.5 32.8 0 45.3l64 64c9.2 9.2 22.9 11.9 34.9 6.9s19.8-16.6 19.8-29.6V448H352c88.4 0 160-71.6 160-160z">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                        <!-- add this -->
+                                        <input class="prs-input" hidden name="discount%" id="discount%" value="" />
+                                    </div>
+                                </div>
+                                <div class="add-deal__box tax _hidden">
+                                    <span class="main-text-title">Tax</span>
+                                    <div class="header-table-invoice__input">
+                                        <span class="main-text" data-Currency>MXV</span>
+                                        <input type="number" name="tax" value="0" class="add-deal__input" id="id_tax">
+                                        <span hidden="hidden">{{ form.tax_changer }}</span>
+                                        <button type="button" class="body-table-invoice__inpbtn">
+                                            <svg class="svg-inline--fa fa-repeat" aria-hidden="true" focusable="false"
+                                                data-prefix="fas" data-icon="repeat" role="img"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                                                data-fa-i2svg="">
+                                                <path fill="currentColor"
+                                                    d="M0 224c0 17.7 14.3 32 32 32s32-14.3 32-32c0-53 43-96 96-96H320v32c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l64-64c12.5-12.5 12.5-32.8 0-45.3l-64-64c-9.2-9.2-22.9-11.9-34.9-6.9S320 19.1 320 32V64H160C71.6 64 0 135.6 0 224zm512 64c0-17.7-14.3-32-32-32s-32 14.3-32 32c0 53-43 96-96 96H192V352c0-12.9-7.8-24.6-19.8-29.6s-25.7-2.2-34.9 6.9l-64 64c-12.5 12.5-12.5 32.8 0 45.3l64 64c9.2 9.2 22.9 11.9 34.9 6.9s19.8-16.6 19.8-29.6V448H352c88.4 0 160-71.6 160-160z">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                        <!-- add this -->
+                                        <input class="prs-input" hidden name="tax%" id="tax%" value="" />
+                                    </div>
+                                </div>
+                                <div class="add-deal__box shipping _hidden">
+                                    <span class="main-text-title">Shipping</span>
+                                    <div class="header-table-invoice__input">
+                                        <span class="main-text" data-Currency>MXV</span>
+                                        <input type="number" name="shipping" value="0" class="add-deal__input"
+                                            id="id_shipping">
+                                    </div>
+                                </div>
+                                <div class="body-table-hForm__btns">
+                                    <span class="body-table-hForm__btn main-text _hidden"
+                                        data-hForm=".discount">Discount</span>
+                                    <span class="body-table-hForm__btn main-text" data-hForm=".tax">Tax</span>
+                                    <span class="body-table-hForm__btn main-text" data-hForm=".shipping">Shipping</span>
+                                </div>
+                                <div class="add-deal__box">
+                                    <span class="main-text-title">Total</span>
+                                    <p class="body-table-invoice__count">
+                                        <span class="main-text body-table-invoice-total-val">0,00</span>
+                                        <span class="main-text" data-Currency>MXV</span>
+                                    </p>
+                                </div>
+                                <div class="add-deal__box">
+                                    <span class="main-text-title">Amount Paid</span>
+                                    <div class="header-table-invoice__input">
+                                        <span class="main-text" data-Currency>MXV</span>
+                                        <input type="number" name="amount_paid" value="0" class="add-deal__input"
+                                            id="id_amount_paid">
+                                    </div>
+                                </div>
+                                <div class="add-deal__box">
+                                    <span class="main-text-title">Balance Due</span>
+                                    <p class="body-table-invoice__count">
+                                        <span class="body-table-invoice-balance-due-val">0,00</span>
+                                        <span class="main-text" data-Currency>MXV</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="invoice__tools tools-invoice">
+                <div class="tools-invoice__btns">
+                    <button class="tools-invoice-btn tools-invoice-btn-down btn _dis" type="submit">
+                        <svg class="svg-inline--fa fa-arrow-to-bottom" aria-hidden="true" focusable="false"
+                            data-prefix="fas" data-icon="arrow-to-bottom" role="img" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 384 512" data-fa-i2svg="">
+                            <path fill="currentColor"
+                                d="M32 480c-17.7 0-32-14.3-32-32s14.3-32 32-32H352c17.7 0 32 14.3 32 32s-14.3 32-32 32H32zM214.6 342.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 242.7V64c0-17.7 14.3-32 32-32s32 14.3 32 32V242.7l73.4-73.4c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3l-128 128z">
+                            </path>
+                        </svg>
+                        Download Invoice
+                    </button>
+                </div>
+                <div class="tools-invoice__drops">
+                    <div class="tools-invoice__drop">
+                        <div class="main-text-title">CURRENCY</div>
+                        <div class="tools-invoic-dropdown dropdown">
+                            <button class="dropdown__button main-text" type="button">$USD</button>
+                            <ul class="dropdown__list" data-CurrencyList>
+                                <li class="dropdown__list-item  dropdown__list-item_active" data-value="USD ($)">$USD
+                                </li>
+                                <li class="dropdown__list-item" data-value="EUR (€)">€EUR</li>
+                                <li class="dropdown__list-item" data-value="GBP (£)">£GBP</li>
+                            </ul>
+                            <input class="dropdown__input_hidden" type="text" name="select-category" value="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+
+{% endblock %}
+
+{% block bottom_section %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script src="{% static 'js/invoice.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Прикріплюємо обробник події до поля з файлом
+        $('#id_logo').change(function() {
+            var input = this;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                // Оновлюємо зображення в попередньому перегляді після завантаження фото
+                reader.onload = function (e) {
+                    $('#logo-preview img').attr('src', e.target.result);
+                    $('#logo-preview').css('display', 'block');
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var textareas = document.querySelectorAll(".add-deal__input");
+
+        textareas.forEach(function(textarea) {
+            function resizeTextarea() {
+                textarea.style.height = "auto";
+                textarea.style.height = (textarea.scrollHeight) + "px";
+            }
+
+            textarea.addEventListener("input", function() {
+                resizeTextarea();
+            });
+
+            // Для відображення коректної висоти при завантаженні сторінки
+            window.addEventListener("load", function() {
+                resizeTextarea();
+            });
+
+            // Для відображення коректної висоти при зміні розмірів вікна
+            window.addEventListener("resize", function() {
+                resizeTextarea();
+            });
+        });
+    });
+
+
+// Знаходимо всі інпути крім кнопки "Download Invoice"
+const inputsExceptDownloadButton = document.querySelectorAll('input:not(.tools-invoice-btn-down)');
+
+// Додаємо обробник подій для інпутів
+inputsExceptDownloadButton.forEach(input => {
+    input.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Відміняємо стандартну дію (відправку форми) для інпутів
+        }
+    });
+});
+
+// Function to format input fields to "00.00" format
+function formatNumberInput(inputElement) {
+  const inputValue = inputElement.value;
+  const formattedValue = parseFloat(inputValue).toFixed(2);
+  inputElement.value = formattedValue;
+}
+
+// Attach event listeners to the relevant input fields
+const rateInput = document.getElementById('id_form-0-rate');
+const discountInput = document.getElementById('id_discount');
+const amountPaidInput = document.getElementById('id_amount_paid');
+
+rateInput.addEventListener('change', function() {
+  formatNumberInput(this);
+});
+
+discountInput.addEventListener('change', function() {
+  formatNumberInput(this);
+});
+
+amountPaidInput.addEventListener('change', function() {
+  formatNumberInput(this);
+});
+
+
+
+
+</script>
+{% endblock %}

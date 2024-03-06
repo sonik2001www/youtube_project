@@ -1,0 +1,135 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block main_section %}
+<nav class="nav">
+    <div class="container">
+        <div class="nav-body">
+            <ul class="burger">
+                <li class="burger__item"></li>
+                <li class="burger__item"></li>
+                <li class="burger__item"></li>
+            </ul>
+            <form method="POST" class="search__box">
+                {% csrf_token %}
+                <div class="search__input">
+                    {% render_field form.query class="search__field" autocomplete="off" spellcheck="false" placeholder="Search" %}
+                </div>
+                <div class="search__filter" data-drop>
+                    <div class="filter__box" data-dropBtn>
+                        <div class="filter-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 32 32"
+                                 id="filter">
+                                <path
+                                        d="M2 7h.142a3.981 3.981 0 0 0 7.716 0H30a1 1 0 0 0 0-2H9.858a3.981 3.981 0 0 0-7.716 0H2a1 1 0 0 0 0 2zm4-3a2 2 0 1 1-2 2 2 2 0 0 1 2-2zm24 11h-.142a3.981 3.981 0 0 0-7.716 0H2a1 1 0 0 0 0 2h20.142a3.981 3.981 0 0 0 7.716 0H30a1 1 0 0 0 0-2zm-4 3a2 2 0 1 1 2-2 2 2 0 0 1-2 2zm4 7H19.858a3.981 3.981 0 0 0-7.716 0H2a1 1 0 0 0 0 2h10.142a3.981 3.981 0 0 0 7.716 0H30a1 1 0 0 0 0-2zm-14 3a2 2 0 1 1 2-2 2 2 0 0 1-2 2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="filter-text">Filter</div>
+                    </div>
+                    <div class="filter-menu filter-menu-right dropmenu" data-dropMenu>
+                        <div class="filter-menu__content">
+                            <div class="filter-menu__top">
+                                <label class="filter-menu__label main-text-title">Search by</label>
+                                <div class="dropdown">
+                                    <button class="dropdown__button main-text" type="button">{{ form.search_by.value }}
+                                    </button>
+                                    <ul class="dropdown__list">
+                                        {% for value, label in form.search_by.field.choices %}
+                                        <li class="dropdown__list-item {% if form.search_by.value == value %}dropdown__list-item_active{% endif %}"
+                                            data-value="{{ value }}">
+                                            {{ label }}
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                    {{ form.search_by }}
+                                </div>
+                            </div>
+                            <div class="filter-menu__body">
+                                <div class="filter-menu__box">
+                                    <label class="filter-menu__label main-text-title">Date after:</label>
+                                    {% render_field form.date_after autocomplete="off" spellcheck="false" value=date_after %}
+                                </div>
+                                <div class="filter-menu__box">
+                                    <label class="filter-menu__label main-text-title">Date before:</label>
+                                    {% render_field form.date_before autocomplete="off" spellcheck="false" value=date_before %}
+                                </div>
+                                <div class="filter-menu__box">
+                                    <label class="filter-menu__label main-text-title">Country:</label>
+                                    <div class="dropdown">
+                                        <button class="dropdown__button main-text" type="button">{{ country_code.value }}</button>
+                                        <ul class="dropdown__list">
+                                            {% for value, label in form.country_code.field.choices %}
+                                            <li class="dropdown__list-item {% if form.country_code.value == value %}dropdown__list-item_active{% endif %}" data-value="{{ value }}">
+                                                {{ label }}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% render_field form.country_code value=country_code %}
+                                    </div>
+                                </div>
+                                <div class="filter-menu__box">
+                                    <label class="filter-menu__label main-text-title">Include Shorts:</label>
+                                    <input type="checkbox" id="shorts" {% if shorts.value == 'True' %}checked{% endif %} name="{{ form.shorts.name }}">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="remove__filter" data-drop>
+                    <div class="remove-filter__box">
+                        <a href="{% url 'remove' %}">Remove</a>
+                        <span class="show-add-remove" data-dropBtn></span>
+                    </div>
+                    <div class="remove-filter__menu dropmenu" data-dropMenu>
+                        <input id="remove-website" type="text" autocomplete="off" spellcheck="false"
+                               placeholder="Enter website for remove" class="remove-filter__input main-text">
+                        <button class="add-remove add-remove-disabled">Add</button>
+                        <div class="remove-list-div" id="remove-list">
+                            {% for remove in removes %}
+                                <div class="remove-list-div-inner">
+                                    <p class="remove-list-p" id="remove-{{ remove }}" name="remove-{{ remove }}">{{ remove }}</p>
+                                    <button class="remove-list-button" type="button" id="button-{{ remove }}" name="button-{{ remove }}">&times;</button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <button class="search__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                        <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
+                           stroke-linejoin="round" stroke-width="2" transform="translate(1 1)">
+                            <circle cx="7.5" cy="7.5" r="7.5"></circle>
+                            <path d="M18 18l-5.2-5.2"></path>
+                        </g>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+<section class="main__section">
+    <div class="container">
+        <div class="main-block">
+            <!-- search websites -->
+            <ul class="search__websites search__wrapper">
+                {{ is_videos }}
+                {% include 'layouts/videos_cycle.html' %}
+            </ul>
+            <div class="show__more-btn">
+                <button>Find more</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
+{% block bottom_section %}
+<script src="{% static 'js/load.js' %}"></script>
+<script src="{% static 'js/moment.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/videos-search.js' %}"></script>
+
+{% endblock %}

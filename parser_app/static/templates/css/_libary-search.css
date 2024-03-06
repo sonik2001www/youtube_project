@@ -1,0 +1,72 @@
+.styled-table {
+    border-collapse: collapse;
+    font-size: 0.9em;
+    width: 100%;
+}
+.styled-table thead tr {
+    border-bottom: 1rem solid var(--border-grey);
+}
+.styled-table th{
+    font-size: var(--fontSize-default);
+    line-height: var(--lineHeight-main);
+    color: var(--textColor-dark);
+    font-weight: 700;
+    cursor: pointer;
+    position: relative;
+}
+.styled-table th::after,
+.styled-table th::before{
+    position: absolute;
+    font-weight: 700;
+    opacity: 0.3;
+    color: var(--textColor-dark);
+}
+.styled-table th::after{
+    content: '↓';
+    right: 10rem;
+}
+.styled-table th::before{
+    content: '↑';
+    right: 15rem;
+}
+.styled-table th.sort-first::before{
+    opacity: 1;
+}
+.styled-table th.sort-second::after{
+    opacity: 1;
+}
+.styled-table td > a.main-text-title{
+    -webkit-transition: var(--transition-1);
+    -moz-transition: var(--transition-1);
+    -o-transition: var(--transition-1);
+    -ms-transition: var(--transition-1);
+    transition: var(--transition-1);
+}
+.styled-table td > a:hover{
+    color: var(--accent);
+}
+.styled-table th,
+.styled-table td {
+    padding: 12rem 10rem;
+    text-align: left;
+    min-width: 150rem;
+}
+.styled-table .styled-table-long{
+    min-width: 400rem;
+}
+.styled-table tbody tr {
+    border-bottom: 1rem solid var(--border-grey);
+}
+.styled-table tbody .active-row td  {
+    font-weight: 400;
+    color: var(--textColor-dark);
+}
+.libary__logo{
+    display: inline-block;
+    width: 100rem;
+}
+.libary__logo img{
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}

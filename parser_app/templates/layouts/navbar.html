@@ -1,0 +1,204 @@
+{% load static %}
+<aside class="navbar navbar-animation" id="navbar">
+    <div class="navbar-close"></div>
+    <div id="navbar-content">
+        <!-- top -->
+        <div class="navbar__top">
+            <a href="{% url 'pars' %}" class="navbar__logo">
+                <img src="{% static 'image/scale_logo.png' %}" alt="logo">
+            </a>
+        </div>
+        <!-- main -->
+        <div class="navbar__main">
+            <div class="profile">
+                <a href="#" class="profile__img">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLcyrdHTP66xYSZiPpQ5y6GhXhEb8Nn8NcOw&usqp=CAU"
+                        alt="avatar">
+                </a>
+                {% if request.user.is_authenticated %}
+                <div class="profile__name">{{ request.user.username }}</div>
+                {% else %}
+                <div class="profile__name">AnonimousUser</div>
+                {% endif %}
+            </div>
+            <div class="AsideDropdown" button-selector=".profile">
+                <ul class="navbar__items">
+                    <!-- account -->
+                    <li class="navbar__item">
+                        <a href="{% url 'user_profile' %}" class="navbar__item-link">
+                            <!-- <div class="navbar__item-link-icon navbar__item-link-account">A</div> -->
+                            <div class="navbar__item-link-icon navbar__item-link-acount">
+                                <img src="{% static 'image/user.svg' %}" alt="user">
+                            </div>
+                            <span
+                                class="navbar__item-link-text {% if 'profile' in request.path %}navbar__item-link-active{% endif %}">Profile</span>
+                        </a>
+                        <div class="spoiler">Profile</div>
+                    </li>
+                    <li class="navbar__item">
+                        <a href="{% url 'account_logout' %}" class="navbar__item-link">
+                            <!-- <div class="navbar__item-link-icon navbar__item-link-account">A</div> -->
+                            <div class="navbar__item-link-icon navbar__item-link-acount">
+                                <img src="{% static 'image/user.svg' %}" alt="user">
+                            </div>
+                            <span
+                                class="navbar__item-link-text {% if 'profile' in request.path %}navbar__item-link-active{% endif %}">Logout</span>
+                        </a>
+                        <div class="spoiler">Logout</div>
+                    </li>
+                </ul>
+            </div>
+            <ul class="navbar__items">
+                <!-- Dashboard -->
+                <li class="navbar__item">
+                    <a href="{% url 'pars' %}" class="navbar__item-link">
+                        <div class="navbar__item-link-icon navbar__item-link-dashboard">
+                            <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" enable-background="new 0 0 24 24" viewBox="0 0 24 24">
+                                <path d="M10.5,13h-7C3.2,13,3,13.2,3,13.5v7C3,20.8,3.2,21,3.5,21h7c0.3,0,0.5-0.2,0.5-0.5v-7C11,13.2,10.8,13,10.5,13z M10,20H4v-6h6V20z M10.5,3h-7C3.2,3,3,3.2,3,3.5v7C3,10.8,3.2,11,3.5,11h7c0.3,0,0.5-0.2,0.5-0.5v-7C11,3.2,10.8,3,10.5,3z M10,10H4V4h6V10z M20.5,3h-7C13.2,3,13,3.2,13,3.5v7c0,0.3,0.2,0.5,0.5,0.5h7c0.3,0,0.5-0.2,0.5-0.5v-7C21,3.2,20.8,3,20.5,3z M20,10h-6V4h6V10z M20.5,16.5h-3v-3c0-0.3-0.2-0.5-0.5-0.5s-0.5,0.2-0.5,0.5v3h-3c-0.3,0-0.5,0.2-0.5,0.5s0.2,0.5,0.5,0.5h3v3c0,0.3,0.2,0.5,0.5,0.5h0c0.3,0,0.5-0.2,0.5-0.5v-3h3c0.3,0,0.5-0.2,0.5-0.5S20.8,16.5,20.5,16.5z"></path>
+			    </svg> -->
+                            <img src="{% static 'image/dashboard.svg' %}" alt="dashboard">
+                        </div>
+                        <span
+                            class="navbar__item-link-text {% if 'pars' in request.path %}navbar__item-link-active{% endif %}">Dashboard</span>
+                    </a>
+                    <div class="spoiler">Dashboard</div>
+                </li>
+                <!-- Website search -->
+                <li class="navbar__item">
+                    <a href="{% url 'video_output' %}" class="navbar__item-link">
+                        <div class="navbar__item-link-icon navbar__item-link-search">
+                            <!--<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+                                <g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round"
+                                   stroke-linejoin="round" stroke-width="2" transform="translate(1 1)">
+                                    <circle cx="7.5" cy="7.5" r="7.5"></circle>
+                                    <path d="M18 18l-5.2-5.2"></path>
+                                </g>
+			    </svg> -->
+                            <img src="{% static 'image/search.svg' %}" alt="search">
+                        </div>
+                        <span
+                            class="navbar__item-link-text {% if 'videos' in request.path %}navbar__item-link-active{% endif %}">Website
+                            search</span>
+                    </a>
+                    <div class="spoiler">Website search</div>
+                </li>
+                <!-- Creator search -->
+                <li class="navbar__item">
+                    <a href="{% url 'channels_output' %}" class="navbar__item-link">
+                        <div class="navbar__item-link-icon navbar__item-link-creator-search">
+                            <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                 enable-background="new 0 0 60 60" viewBox="0 0 60 60">
+                                <path d="M19.6442413 11.9022827c-1.7402344.659668-3.3178711 1.6845703-4.6933594 3.0493164-3.1977539 3.2080078-4.5708008 7.7851563-3.6728516 12.2431641.0957031.4750977.5131836.8027344.9794922.8027344.0654297 0 .1318359-.0063477.1982422-.0195313.5415039-.109375.8920898-.6367188.7832031-1.1777344-.7661133-3.8017578.4033203-7.703125 3.1245117-10.4326172 1.1713867-1.1625977 2.5136719-2.0356445 3.9897461-2.5952148.5166016-.1958008.7763672-.7729492.5805664-1.2895508C20.7384796 11.9662476 20.1603546 11.7064819 19.6442413 11.9022827zM24.3786163 11.0072632c-.1132813 0-.2446289.0053711-.3583984.0244141-.5444336.0932617-.9282227.6118164-.8354492 1.15625.0834961.487793.4926758.8344727.9682617.8344727.0551758 0 .1113281-.0048828.1679688-.0146484l.0576172-.0004883c.5522461 0 1-.4477539 1-1S24.9308624 11.0072632 24.3786163 11.0072632z"></path>
+                                <path d="M40.8887482 33.1474609c1.3900146-2.6300049 2.1400146-5.5700073 2.1400146-8.6399536 0-4.9400024-1.9300537-9.5900269-5.4200439-13.0900269-7.2199707-7.2199707-18.9699707-7.2199707-26.1900024 0-7.2199707 7.2200317-7.2199707 18.9700317 0 26.1900024 3.6100464 3.6099854 8.3500366 5.4099731 13.0900269 5.4099731 2.9799805 0 5.9500122-.7099609 8.6499634-2.1299438L41.4587555 49.1875l7.7299805-7.7399902L40.8887482 33.1474609zM12.8387604 36.1875c-6.4400024-6.4400024-6.4400024-16.9100342 0-23.3500366 3.2199707-3.2199707 7.4400024-4.8299561 11.6699829-4.8299561s8.4599609 1.6099854 11.6799927 4.8299561c3.1199951 3.1100464 4.8400269 7.2600098 4.8400269 11.6700439 0 4.4199829-1.7200317 8.5699463-4.8400269 11.6799927C29.7487335 42.6275024 19.2787628 42.6275024 12.8387604 36.1875zM52.3987579 44.6574707l-1.8000488-1.7999878-7.7299805 7.7399902 1.7999878 1.7999878c1.0599976 1.0599976 2.460022 1.6000366 3.8600464 1.6000366 1.3999634 0 2.7999878-.5400391 3.8699951-1.6000366C54.5287628 50.2674561 54.5287628 46.7874756 52.3987579 44.6574707z"></path>
+			    </svg> -->
+                            <img src="{% static 'image/search.svg' %}" alt="search">
+                        </div>
+                        <span
+                            class="navbar__item-link-text {% if 'channels' in request.path %}navbar__item-link-active{% endif %}">Creator
+                            search</span>
+                    </a>
+                    <div class="spoiler">Creator search</div>
+                </li>
+                <!-- Brand Libary -->
+                <li class="navbar__item">
+                    <a href="{% url 'libary_search' sort_field='name' %}" class="navbar__item-link">
+                        <div class="navbar__item-link-icon navbar__item-link-libary">
+                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="33" height="32" viewBox="0 0 33 32" fill="currentColor">
+                                <g>
+                                    <path d="M1.5 32h21c.827 0 1.5-.673 1.5-1.5V23c0-.01-.005-.018-.006-.028.055-.035.112-.068.166-.105l7.986 7.986a.5.5 0 1 0 .708-.706l-7.913-7.913A6.479 6.479 0 0 0 27 17.5a6.494 6.494 0 0 0-3.006-5.472c.001-.01.006-.018.006-.028V9.5c0-.017-.008-.031-.009-.047-.002-.023-.008-.043-.013-.065a.488.488 0 0 0-.09-.191c-.007-.009-.006-.02-.013-.029l-8-9c-.003-.003-.007-.003-.01-.006a.49.49 0 0 0-.223-.134c-.019-.006-.036-.008-.056-.011C15.557.012 15.53 0 15.5 0h-14C.673 0 0 .673 0 1.5v29c0 .827.673 1.5 1.5 1.5zM26 17.5c0 3.033-2.468 5.5-5.5 5.5S15 20.533 15 17.5s2.468-5.5 5.5-5.5 5.5 2.467 5.5 5.5zM16 1.815L22.387 9H16.5c-.22 0-.5-.42-.5-.75V1.815zM1 1.5a.5.5 0 0 1 .5-.5H15v7.25c0 .809.655 1.75 1.5 1.75H23v1.501A6.475 6.475 0 0 0 15.821 13H5.5a.5.5 0 0 0 0 1h9.532a6.442 6.442 0 0 0-1.006 3H5.5a.5.5 0 0 0 0 1h8.525a6.454 6.454 0 0 0 1.006 3H5.5a.5.5 0 0 0 0 1h10.25c.021 0 .039-.009.06-.012a6.476 6.476 0 0 0 7.19 1.51V30.5a.5.5 0 0 1-.5.5h-21c-.28 0-.5-.22-.5-.5v-29z"></path>
+                                    <path d="M5.5 10h6a.5.5 0 000-1h-6a.5.5 0 000 1zM5.5 26h13a.5.5 0 000-1h-13a.5.5 0 000 1z"></path>
+                                </g>
+			    </svg> -->
+                            <img src="{% static 'image/libary.svg' %}" alt="libary">
+                        </div>
+                        <span
+                            class="navbar__item-link-text {% if 'libary_search' in request.path %}navbar__item-link-active{% endif %}">Brand
+                            Libary</span>
+                    </a>
+                    <div class="spoiler">Brand Libary</div>
+                </li>
+                <!-- Deals Tracker -->
+                <li class="navbar__item">
+                    <button type="button" id="button-deals-tracker"  class="navbar__item-link">
+                        <div class="navbar__item-link-icon navbar__item-link-tools">
+                            <img src="{% static 'image/libary.svg' %}" alt="tools">
+                        </div>
+                        <span id="span-deals-tracker" class="navbar__item-link-text">Deals Tracker</span>
+                    </button>
+                    <div class="spoiler">Deals Tracker</div>
+                </li>
+                <div id="div-deals-tracker" class="div-deals-tracker">
+                    <ul class="navbar__items ul-deals-tracker">
+                        <!-- account -->
+                        <li class="navbar__item">
+                            <a href="{% url 'add_deal' %}" class="navbar__item-link">
+                                <div class="navbar__item-link-icon navbar__item-link-acount">
+                                    <img src="{% static 'image/libary.svg' %}" alt="user">
+                                </div>
+                                <span class="navbar__item-link-text {% if 'add_deal' in request.path %}navbar__item-link-active{% endif %}">Add Deals</span>
+                            </a>
+                            <div class="spoiler">Add Deals</div>
+                        </li>
+                        <li class="navbar__item">
+                            <a href="{% url 'deals' %}" class="navbar__item-link">
+                                <div class="navbar__item-link-icon navbar__item-link-acount">
+                                    <img src="{% static 'image/libary.svg' %}" alt="user">
+                                </div>
+                                <span class="navbar__item-link-text {% if 'deals' in request.path %}navbar__item-link-active{% endif %}">Deal</span>
+                            </a>
+                            <div class="spoiler">Deal</div>
+                        </li>
+                        <li class="navbar__item">
+                            <a href="{% url 'calendar' %}" class="navbar__item-link">
+                                <div class="navbar__item-link-icon navbar__item-link-acount">
+                                    <img src="{% static 'image/libary.svg' %}" alt="user">
+                                </div>
+                                <span class="navbar__item-link-text {% if 'calendar' in request.path %}navbar__item-link-active{% endif %}">Calendar</span>
+                            </a>
+                            <div class="spoiler">Calendar</div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Invoice -->
+                <li class="navbar__item">
+                    <a href="{% url 'invoice' %}" class="navbar__item-link">
+                        <div class="navbar__item-link-icon navbar__item-link-tools">
+                            <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" enable-background="new 0 0 24 24" viewBox="0 0 24 24">
+                                <path d="M10.5,13h-7C3.2,13,3,13.2,3,13.5v7C3,20.8,3.2,21,3.5,21h7c0.3,0,0.5-0.2,0.5-0.5v-7C11,13.2,10.8,13,10.5,13z M10,20H4v-6h6V20z M10.5,3h-7C3.2,3,3,3.2,3,3.5v7C3,10.8,3.2,11,3.5,11h7c0.3,0,0.5-0.2,0.5-0.5v-7C11,3.2,10.8,3,10.5,3z M10,10H4V4h6V10z M20.5,3h-7C13.2,3,13,3.2,13,3.5v7c0,0.3,0.2,0.5,0.5,0.5h7c0.3,0,0.5-0.2,0.5-0.5v-7C21,3.2,20.8,3,20.5,3z M20,10h-6V4h6V10z M20.5,16.5h-3v-3c0-0.3-0.2-0.5-0.5-0.5s-0.5,0.2-0.5,0.5v3h-3c-0.3,0-0.5,0.2-0.5,0.5s0.2,0.5,0.5,0.5h3v3c0,0.3,0.2,0.5,0.5,0.5h0c0.3,0,0.5-0.2,0.5-0.5v-3h3c0.3,0,0.5-0.2,0.5-0.5S20.8,16.5,20.5,16.5z"></path>
+			    </svg> -->
+                            <img src="{% static 'image/libary.svg' %}" alt="invoice">
+                        </div>
+                        <span
+                            class="navbar__item-link-text {% if 'invoice' in request.path %}navbar__item-link-active{% endif %}">Invoice</span>
+                    </a>
+                    <div class="spoiler">Invoice</div>
+                </li>
+                <!-- Pipeline -->
+                <li class="navbar__item">
+                    <a href="{% url 'drug_and_door' %}" class="navbar__item-link">
+                        <div class="navbar__item-link-icon navbar__item-link-tools">
+                            <img src="{% static 'image/libary.svg' %}" alt="tools">
+                        </div>
+                        <span
+                            class="navbar__item-link-text {% if 'tasks' in request.path %}navbar__item-link-active{% endif %}">Pipeline</span>
+                    </a>
+                    <div class="spoiler">Tools</div>
+                </li>
+                <!-- Support -->
+                <li class="navbar__item">
+                    <a href="{% url 'support' %}" class="navbar__item-link">
+                        <div class="navbar__item-link-icon navbar__item-link-support">
+                            <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="92" height="92" viewBox="0 0 92 92" id="question">
+                                <path d="M60.9 25.5c3.2 3.6 4.7 8.5 4 13.7-1.2 9.6-8.2 13-14.4 13H50v2.4c0 2.2-1.8 4-4 4s-4-1.8-4-4v-3.2c0-3.3 1.4-7.2 8.5-7.2 3.9 0 5.9-2 6.4-6 .2-1.3.3-4.8-2.1-7.4-1.9-2.1-5-3.2-9.2-3.2-9 0-9.3 5.9-9.3 6.5 0 2.2-1.8 4-4 4s-4-1.8-4-4c0-4 3.1-14.5 17.3-14.5 8.3 0 12.9 3.2 15.3 5.9zM45.7 62c-1.3 0-2.6.5-3.5 1.5-.9.9-1.5 2.2-1.5 3.5 0 1.3.5 2.6 1.5 3.5.9.9 2.2 1.5 3.5 1.5 1.3 0 2.6-.5 3.5-1.5.9-.9 1.5-2.2 1.5-3.5 0-1.3-.5-2.6-1.5-3.5-.9-.9-2.1-1.5-3.5-1.5zM92 46c0 25.4-20.6 46-46 46S0 71.4 0 46 20.6 0 46 0s46 20.6 46 46zm-8 0C84 25 67 8 46 8S8 25 8 46s17 38 38 38 38-17 38-38z"></path>
+			    </svg> -->
+                            <img src="{% static 'image/info.svg' %}" alt="info">
+                        </div>
+                        <span
+                            class="navbar__item-link-text {% if 'support' in request.path %}navbar__item-link-active{% endif %}">Support</span>
+                        <div class="spoiler">Support</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</aside>

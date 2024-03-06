@@ -1,0 +1,288 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+
+{% block extra_head %}
+<style>
+
+
+    /* Стилі для дівів */
+    .container {
+        display: flex;
+        width: auto;
+        padding: 0;
+        margin: 0;
+        padding-left: 350rem;
+        max-width: fit-content;
+    }
+
+    .main__section {
+        display: flex;
+        overflow-x: auto;
+        flex-wrap: nowrap; /* Забороняє переноси */
+        align-items: center; /* Вирівнювання елементів по вертикалі */
+    }
+
+    /* start fix bax */
+    .col-container {
+        float: left;
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        flex-shrink: 0;
+        margin-right: 10px;
+        min-height: 300px;
+        padding: 10px;
+        background-color: var(--background-main);
+        padding: 22rem;
+        border-radius: var(--border-raduis-default);
+        position: relative;
+    }
+
+#last-container {
+    float: left;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    flex-shrink: 0;
+    margin-right: 10px;
+    min-height: 300px;
+    padding: 10px;
+    background-color: var(--background-main);
+    padding: 22rem;
+    border-radius: var(--border-raduis-default);
+    position: relative;
+}
+
+    .sortable-list {
+        min-height: 100px;
+        flex: 1 1 auto;
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 5px;
+    }
+
+    /* end fix bax */
+
+    /* Стилі для прокрутки */
+    ::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #aaa;
+    }
+
+    .sales-title {
+        display: flex;
+        align-items: center;
+        column-gap: 5px;
+        font-size: 16px;
+        padding-bottom: 5px;
+        border-bottom: 1rem solid var(--border-grey);
+    }
+
+    .sales-title .delete-button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin: 10px;
+    }
+
+    .delete-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        color: #e61111;
+    }
+
+    .delete-button:before,
+    .delete-button:after {
+        content: "";
+        position: absolute;
+        width: 10px;
+        height: 2px;
+        background: currentColor;
+    }
+
+    .delete-button:before {
+        transform: rotate(45deg);
+    }
+
+    .delete-button:after {
+        transform: rotate(-45deg);
+    }
+
+    .add-button_col,
+    .add-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 25px;
+        height: 25px;
+        font-size: 22px;
+        cursor: pointer;
+        overflow: hidden;
+    }
+
+    .add-button_col::before,
+    .add-button::before {
+        content: "+";
+        display: inline-block;
+        font-weight: 400;
+        position: absolute;
+        color: var(--textColor-main);
+        font-size: inherit;
+    }
+
+    .add-button_col {
+        font-size: 30px;
+    }
+
+    .sortable-list__item .delete-button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin: 5px;
+        color: #fff;
+    }
+
+
+    .sortable-list__item {
+        background-color: var(--accent-second);
+        color: #fff;
+        border-radius: 5px;
+        padding: 10px 10px;
+        position: relative;
+    }
+
+    .sortable-list__info {
+        display: flex;
+        align-items: center;
+        column-gap: 5px;
+    }
+
+    .stars-container {
+        cursor: default;
+    }
+
+    .star {
+        color: var(--border-grey-light);
+        cursor: pointer;
+    }
+
+    .stars-container .star.filled {
+        color: gold;
+    }
+
+    .field-form,
+    .column-form {
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+        margin-top: 20px;
+    }
+
+    .field-form input,
+    .column-form input {
+        padding-bottom: 5px;
+        border-bottom: 1rem solid var(--border-grey);
+        color: var(--textColor-main);
+    }
+
+    .field-form input::placeholder,
+    .column-form input::placeholder {
+        color: var(--textColor-grey);
+    }
+
+    .field-form button,
+    .column-form button {
+        background-color: var(--accent-second);
+        color: #fff;
+        border-radius: 5px;
+        padding: 5px 10px;
+        width: 200px;
+        margin: 0 auto;
+        transition: all .2s ease;
+    }
+
+    @media (any-hover: hover) {
+
+        .field-form button:hover,
+        .column-form button:hover {
+            background-color: var(--hover-accent-second);
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block head_title %}Tasks{% endblock %}
+
+
+{% block main_section %}
+    <section class="main__section">
+        <div class="container">
+            {% for col in drug_and_door_cols %}
+                <div class="col-container" data-col-id="{{ col.id }}">
+                    <h3 class="sales-title main-text-title">{{ col.name }}
+                        <span class="delete-button" data-col-id="{{ col.id }}"></span>
+                        <span class="add-button"></span></h3>
+                    <ul class="sortable-list">
+                        {% for field in col.order_by_field %}
+                            <li data-field-id="{{ field.id }}" class="sortable-list__item">
+                                <div class="sortable-list__info">
+                                    {% if field.price != ' ' %}
+                                        {{ field.name }} - {{ field.price }}
+                                    {% else %}
+                                        {{ field.name }}
+                                    {% endif %}
+                                    <span class="delete-button" data-field-id="{{ field.id }}"></span>
+                                </div>
+                                <div class="stars-container" data-stars="{{ field.stars }}" data-field-id="{{ field.id }}">
+                                    <span class="star">&#9733;</span>
+                                    <span class="star">&#9733;</span>
+                                    <span class="star">&#9733;</span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="field-form" style="display: none;">
+                        <input type="text" class="name-input" placeholder="Name">
+                        <input type="text" id="price-input" class="price-input" placeholder="Price">
+                        <button class="add-field-button">Add</button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="last-container" id="last-container">
+            <h3><span class="add-col-button add-button_col"></span></h3>
+            <div class="column-form" id="column-form" style="display: none;">
+                <input id="column-name-input" type="text" class="column-name-input" placeholder="Column Name">
+                <button class="add-column-button">Add</button>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+
+{% block bottom_section %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="{% static 'js/drug_and_door.js' %}"></script>
+<script>
+
+</script>
+{% endblock %}
+
+
+
+

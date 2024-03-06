@@ -1,0 +1,175 @@
+{% extends 'layouts/basic.html' %}
+{% load static %}
+{% block main_section %}
+{% if messages %}
+<ul class="messages list-unstyled">
+    {% for message in messages %}
+    <li {% if message.tags %}class="text-bg-{{ message.tags }} bg-opacity-50 message" {% endif %}>
+        <p align="center" class="d-flex-between px-5 justify-content-between msg">
+            {{ message }}
+            <button class="btn btn-sm btn-close-white"
+                onclick="this.parentElement.parentElement.remove()">&times;</button>
+        </p>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<!-- MAIN SECTION -->
+<section class="main__section">
+
+    <div class="container">
+        <h1 class="h1">
+            Pricing
+        </h1>
+        {% for message in messages %}
+        <div class="container-fluid p-4 border-2 rounded-2">
+            <div class="alert alert-success alert-dismissible rounded-5" role="alert">
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
+        <div class="prace-cards">
+
+            <!-- prace-car -->
+            <div class="prace-card">
+                <div class="pricing_wrap">
+                    <div class="pricing_head">
+                        <h4>{{ low_quota.name }}</h4>
+                    </div>
+                    <div class="pricing_price">
+                        <h2><span>$</span>{{ low_quota.price }}</h2>
+                        <span>per user, per month</span>
+                    </div>
+                    <div class="pricing_body">
+                        <ul>
+                            <li>99.5% Uptime Guarantee</li>
+                            <li>120GB CDN Bandwidth</li>
+                            <li>5GB Cloud Storage</li>
+                            <li class="none">Personal Help Support</li>
+                            <li class="none">Enterprise SLA</li>
+                        </ul>
+                    </div>
+                    <div class="pricing_footer">
+                        <form action="{% url 'payment_manager' %}" method="POST">{% csrf_token %}
+                            <div class="d-flex-between px-5">
+                                <label class="payment-option rounded-2 checked">
+                                    <img src="{% static '/templates/images/stripe_logo.png' %}" alt="Stripe">
+                                    <input type="radio" name="paysystem" value="Stripe" checked
+                                        onclick="highlightLabel(this)">
+                                </label>
+                                <label class="payment-option rounded-2">
+                                    <img src="{% static 'templates/images/paypal_logo.png' %}" alt="PayPal">
+                                    <input type="radio" name="paysystem" value="PayPal" onclick="highlightLabel(this)">
+                                </label>
+                            </div>
+                            <hr>
+                            <input type="hidden" name="subscription" value="Low" />
+                            <button style="width: 100%;" class="btn choose_package" id="Low_sub" type="submit">
+                                Start {{ low_quota.name }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- prace-car -->
+            <div class="prace-card">
+                <div class="pricing_wrap">
+                    <div class="pricing_head">
+                        <div class="recommended">Best Value</div>
+                        <h4>{{ medium_quota.name }}</h4>
+                    </div>
+                    <div class="pricing_price">
+                        <h2><span>$</span>{{ medium_quota.price }}</h2>
+                        <span>per user, per month</span>
+                    </div>
+                    <div class="pricing_body">
+                        <ul>
+                            <li>99.5% Uptime Guarantee</li>
+                            <li>150GB CDN Bandwidth</li>
+                            <li>10GB Cloud Storage</li>
+                            <li>Personal Help Support</li>
+                            <li class="none">Enterprise SLA</li>
+                        </ul>
+                    </div>
+                    <div class="pricing_footer">
+                        <form action="{% url 'payment_manager' %}" method="POST">{% csrf_token %}
+                            <div class="d-flex-between px-5">
+                                <label class="payment-option rounded-2 checked">
+                                    <img src="{% static '/templates/images/stripe_logo.png' %}" alt="Stripe">
+                                    <input type="radio" name="paysystem" value="Stripe" checked
+                                        onclick="highlightLabel(this)">
+                                </label>
+                                <label class="payment-option rounded-2">
+                                    <img src="{% static 'templates/images/paypal_logo.png' %}" alt="PayPal">
+                                    <input type="radio" name="paysystem" value="PayPal" onclick="highlightLabel(this)">
+                                </label>
+                            </div>
+                            <hr>
+                            <input type="hidden" name="subscription" value="Medium" />
+                            <button style="width: 100%;" class="btn choose_package active" type="submit">
+                                Start {{ medium_quota.name }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- prace-car-->
+            <div class="prace-card">
+                <div class="pricing_wrap">
+                    <div class="pricing_head">
+                        <h4>{{ pro_quota.name }}</h4>
+                    </div>
+                    <div class="pricing_price">
+                        <h2><span>$</span>{{ pro_quota.price }}</h2>
+                        <span>2 user, per month</span>
+                    </div>
+                    <div class="pricing_body">
+                        <ul>
+                            <li>100% Uptime Guarantee</li>
+                            <li>200GB CDN Bandwidth</li>
+                            <li>20GB Cloud Storage</li>
+                            <li>Personal Help Support</li>
+                            <li>Enterprise SLA</li>
+                        </ul>
+                    </div>
+                    <div class="pricing_footer">
+                        <form action="{% url 'payment_manager' %}" method="POST">{% csrf_token %}
+                            <div class="d-flex-between px-5">
+                                <label class="payment-option rounded-2 checked">
+                                    <img src="{% static '/templates/images/stripe_logo.png' %}" alt="Stripe">
+                                    <input type="radio" name="paysystem" value="Stripe" checked
+                                        onclick="highlightLabel(this)">
+                                </label>
+                                <label class="payment-option rounded-2">
+                                    <img src="{% static 'templates/images/paypal_logo.png' %}" alt="PayPal">
+                                    <input type="radio" name="paysystem" value="PayPal" onclick="highlightLabel(this)">
+                                </label>
+                            </div>
+                            <hr>
+                            <input type="hidden" name="subscription" value="Pro" />
+                            <button style="width: 100%;" class="btn choose_package" type="submit">
+                                Start {{ pro_quota.name }}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+<script>
+    function highlightLabel(input) {
+        const labels = document.querySelectorAll('.payment-option');
+        labels.forEach(label => {
+            if (label.querySelector('input').checked) {
+                label.classList.add('checked');
+            } else {
+                label.classList.remove('checked');
+            }
+        });
+    }
+</script>
+
+{% endblock %}
