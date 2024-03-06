@@ -176,7 +176,7 @@ You can generate a secure random secret key using various online tools or Django
 - `TOKENS`: This variable represents a list of tokens needed for authentication with the YouTube API. Each token in the list, denoted as `'YOUR_TOKEN_1'`, `'YOUR_TOKEN_2'`, and so on up to `'YOUR_TOKEN_N'`, corresponds to an individual token provided by YouTube for accessing its API.
 
 
-### 5. Migrations
+### 6. Migrations
 
 - After activating the virtual environment, you can run Django migrations:
 
@@ -185,7 +185,7 @@ python manage.py migrate
 ~~~
 
 
-### 6. Running the Server
+### 7. Running the Server
 
 To run the development server for your Django application, navigate to the project's root directory in your terminal or command prompt and execute the following command:
 
